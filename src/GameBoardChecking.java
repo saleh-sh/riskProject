@@ -4,6 +4,8 @@ public class GameBoardChecking {
 
     public void updateNumOfSoldiersReceived(Player currentPlayer) {
 
+        System.out.println("game board checking : update num of soldiers recived method");
+
         if (searchForAsia(currentPlayer)) {
             currentPlayer.increaseSoldiers(Map.getAsia().getPrizeSoldier());
         }

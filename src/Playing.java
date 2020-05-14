@@ -20,7 +20,7 @@ public class Playing {
             Map.getLandHashMap().get(landId).increaseSoldiers(1);
             currentPlayer.decreaseSoldiers(1);
             System.out.println(currentPlayer.getSoldiers());
-            //System.out.println("method:put the bead :second if done");
+            System.out.println("method:put the bead :second if done");
         }
 
         else {

@@ -38,9 +38,27 @@ public class GameMapController implements ActionListener {
                 PlayersController.findCurrentPlayer();
                 boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
                 boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
-                //System.out.println("number of solders update");
+                System.out.println("soldiers count update in put the bead phase");
             }
         }
+////////////////////////////////////////////////////////////////////////////////
+        else if(gamePhase.isCanReinforce()){
+            int landId = Integer.parseInt(e.getActionCommand());
+            playing.putTheBead(landId);
+            LandButton targetButton = boardView.getLandButtonByID(landId);
+            targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
+
+            int i;
+            if(PlayersController.getCurrentPlayer().getSoldiers() != 0){
+                PlayersController.findCurrentPlayer();
+                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
+                boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
+                System.out.println("soldiers count update in rein force phase");
+            }else {
+                gamePhase.setCanReinforce(false);
+            }
+        }
+
     }
 }
 /*
