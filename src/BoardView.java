@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class BoardView extends JFrame {
 
-    //GameMapController gameMapController = new GameMapController(new Playing(),this,new GamePhase());
+    GameMapController gameMapController = new GameMapController(new Playing(),this,new GamePhase());
 
     private LandButton[][] landButtons;
     private HashMap<Integer, LandButton> landButtonMap;
@@ -71,7 +71,7 @@ public class BoardView extends JFrame {
                 landButtonMap.put(id, landButtons[i][j]);
                 //////
                 landButtons[i][j].setActionCommand("" + id);
-                //landButtons[i][j].addActionListener(gameMapController);
+                landButtons[i][j].addActionListener(gameMapController);
                 if (Map.getAsia().getLands().contains(id)) {
                     landButtons[i][j].setBackground(Color.green);
                 } else if (Map.getAfrica().getLands().contains(id)) {
@@ -156,7 +156,7 @@ public class BoardView extends JFrame {
         numberOfReadySoldiers = new JLabel();
         numberOfReadySoldiers.setBounds(30, 90, 140, 140);
         numberOfReadySoldiers.setText("ready soldiers:" + PlayersController.getCurrentPlayer().getSoldiers());
-        System.out.println("number of soldiers set for label at int place");
+        //System.out.println("number of soldiers set for label at int place");
         numberOfReadySoldiers.setFont(new Font("Algerian", Font.BOLD, 20));
 
         label = new JLabel();
@@ -167,29 +167,6 @@ public class BoardView extends JFrame {
 
         numberOfSoldiersPanel.add(label);
         numberOfSoldiersPanel.add(numberOfReadySoldiers);
-
-
-/*
-        takingSoldierButton = new JButton("ready soldier: ");
-        takingSoldierButton.setActionCommand("getting soldier");
-        takingSoldierButton.setFont(new Font("Algerian", Font.BOLD, 15));
-        takingSoldierButton.setVerticalTextPosition(SwingConstants.CENTER);
-        takingSoldierButton.setSize(140, 140);
-        // takingSoldierButton.addActionListener(new PutTheBeadController());
-
-        undoButton = new JButton("undo");
-        undoButton.setActionCommand("undo");
-        undoButton.setFont(new Font("Algerian", Font.BOLD, 15));
-        undoButton.setVerticalTextPosition(SwingConstants.CENTER);
-        undoButton.setSize(200, 140);
-        //undoButton.addActionListener();
-
-        numberOfSoldiersPanel.add(takingSoldierButton);
-        numberOfSoldiersPanel.add(undoButton);
-
-
-        numberOfSoldiersPanel.setLayout(new BoxLayout(numberOfSoldiersPanel, BoxLayout.Y_AXIS));
-        */
 
         return numberOfSoldiersPanel;
     }

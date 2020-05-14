@@ -6,20 +6,21 @@ public class Playing {
 
 
     public void putTheBead(int landId){
+        Player currentPlayer = PlayersController.getCurrentPlayer();
 
         if(Map.getLandHashMap().get(landId).isConquered() == false){
 
             Map.getLandHashMap().get(landId).increaseSoldiers(1);
-            Map.getLandHashMap().get(landId).setConqueror(PlayersController.getCurrentPlayer());
-            PlayersController.getCurrentPlayer().decreaseSoldiers(1);
-            PlayersController.getCurrentPlayer().addLand(landId);
+            Map.getLandHashMap().get(landId).setConqueror(currentPlayer);
+            currentPlayer.decreaseSoldiers(1);
+            currentPlayer.addLand(landId);
             System.out.println("method:put the bead :first if done");
 
-        }else if(PlayersController.getCurrentPlayer().getConqueredLands().contains(landId)==true){
+        }else if(currentPlayer.getConqueredLands().contains(landId)==true && currentPlayer.getSoldiers()>0){
             Map.getLandHashMap().get(landId).increaseSoldiers(1);
-            PlayersController.getCurrentPlayer().decreaseSoldiers(1);
-            System.out.println(PlayersController.getCurrentPlayer().getSoldiers());
-            System.out.println("method:put the bead :second if done");
+            currentPlayer.decreaseSoldiers(1);
+            System.out.println(currentPlayer.getSoldiers());
+            //System.out.println("method:put the bead :second if done");
         }
 
         else {

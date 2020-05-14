@@ -25,7 +25,7 @@ public class PlayersController {
         for (int i = 0; i < playersNames.length; i++) {
             playersMap.put(playersNames[i], new Player(playersNames[i], getDefaultNumOfSoldiers(),icons[i]));
         }
-        playerList = new ArrayList<Player>(playersMap.values());
+        playerList = new ArrayList(playersMap.values());
     }
 
 
@@ -33,6 +33,11 @@ public class PlayersController {
         return playerList;
     }
 
+//////////////////////////////////////////////////////////
+    public static HashMap<String, Player> getPlayersMap() {
+        return playersMap;
+    }
+//////////////////////////////////////////////////////////
     public void setNumberOfPlayers(int numberOfPlayers) {
         PlayersController.numberOfPlayers = numberOfPlayers;
     }
@@ -43,8 +48,8 @@ public class PlayersController {
 
     public static void findCurrentPlayer(){
         playerList.add(playerList.get(0));
-        currentPlayer = playerList.get(0);
-        playerList.remove(0);
+       // currentPlayer = playerList.get(0);
+      currentPlayer =  playerList.remove(0);
     }
 
     public static int getDefaultNumOfSoldiers() {

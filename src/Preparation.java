@@ -7,7 +7,10 @@ public class Preparation {
     public void divideLands(){
 
         ArrayList<Land> lands = new ArrayList<>(Map.getLandHashMap().values());
-        ArrayList<Player> players = PlayersController.getPlayerList();
+        //ArrayList<Player> players = PlayersController.getPlayerList();
+        ///////////////////////////////////////////////////////////////////////////////////////
+        ArrayList<Player> players = new ArrayList<>(PlayersController.getPlayersMap().values());
+        ////////////////////////////////////////////////////////////////////////////////////////
 
         Collections.shuffle(lands);
         Collections.shuffle(players);

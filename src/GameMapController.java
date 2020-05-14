@@ -27,7 +27,7 @@ public class GameMapController implements ActionListener {
 
             int i;
             for (i = 0; i < PlayersController.getNumberOfPlayers(); i++) {
-                if (PlayersController.getPlayerList().get(i).getSoldiers() != 0) {
+                if (PlayersController.getPlayerList().get(i).getSoldiers() > 0) {
                     break;
                 }
             }
@@ -38,7 +38,7 @@ public class GameMapController implements ActionListener {
                 PlayersController.findCurrentPlayer();
                 boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
                 boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
-                System.out.println("number of solders update");
+                //System.out.println("number of solders update");
             }
         }
     }
