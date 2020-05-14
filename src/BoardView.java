@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 public class BoardView extends JFrame {
 
+    //GameMapController gameMapController = new GameMapController(new Playing(),this,new GamePhase());
+
     private LandButton[][] landButtons;
     private HashMap<Integer, LandButton> landButtonMap;
 
@@ -69,7 +71,7 @@ public class BoardView extends JFrame {
                 landButtonMap.put(id, landButtons[i][j]);
                 //////
                 landButtons[i][j].setActionCommand("" + id);
-                //landButtons[i][j].addActionListener(new GameMapController());
+                //landButtons[i][j].addActionListener(gameMapController);
                 if (Map.getAsia().getLands().contains(id)) {
                     landButtons[i][j].setBackground(Color.green);
                 } else if (Map.getAfrica().getLands().contains(id)) {
@@ -153,7 +155,8 @@ public class BoardView extends JFrame {
 
         numberOfReadySoldiers = new JLabel();
         numberOfReadySoldiers.setBounds(30, 90, 140, 140);
-        numberOfReadySoldiers.setText("ready soldiers:\n" + PlayersController.getCurrentPlayer().getSoldiers());
+        numberOfReadySoldiers.setText("ready soldiers:" + PlayersController.getCurrentPlayer().getSoldiers());
+        System.out.println("number of soldiers set for label at int place");
         numberOfReadySoldiers.setFont(new Font("Algerian", Font.BOLD, 20));
 
         label = new JLabel();

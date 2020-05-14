@@ -18,6 +18,7 @@ public class Playing {
         }else if(PlayersController.getCurrentPlayer().getConqueredLands().contains(landId)==true){
             Map.getLandHashMap().get(landId).increaseSoldiers(1);
             PlayersController.getCurrentPlayer().decreaseSoldiers(1);
+            System.out.println(PlayersController.getCurrentPlayer().getSoldiers());
             System.out.println("method:put the bead :second if done");
         }
 

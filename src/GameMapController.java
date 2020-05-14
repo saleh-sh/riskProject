@@ -9,20 +9,20 @@ public class GameMapController implements ActionListener {
     BoardView boardView;
     GamePhase gamePhase;
 
-    public GameMapController(Playing playing, BoardView boardView) {
+    public GameMapController(Playing playing, BoardView boardView, GamePhase gamePhase) {
         this.playing = playing;
         this.boardView = boardView;
-        gamePhase = new GamePhase();
+        this.gamePhase = gamePhase;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         if (gamePhase.isPutBeadPhase()) {
             int landId = Integer.parseInt(e.getActionCommand());
+
             playing.putTheBead(landId);
             LandButton targetButton = boardView.getLandButtonByID(landId);
-            targetButton.setText(PlayersController.getCurrentPlayer().getSoldiers() + "");
+            targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
 
 
             int i;
@@ -33,9 +33,12 @@ public class GameMapController implements ActionListener {
             }
             if (i >= PlayersController.getNumberOfPlayers()) {
                 gamePhase.setPutBeadPhase(false);
+                System.out.println("if block");
             } else {
                 PlayersController.findCurrentPlayer();
-                boardView.getLabel().setIcon(boardView.getCurrentPlayerIcon());
+                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
+                boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
+                System.out.println("number of solders update");
             }
         }
     }

@@ -15,7 +15,7 @@ public class PlayersController {
     }
 
     static {
-        findCurrentPlayer();
+       // findCurrentPlayer();
     }
 
     public void createPlayers(String[] playersNames) {
