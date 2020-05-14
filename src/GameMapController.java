@@ -25,6 +25,7 @@ public class GameMapController implements ActionListener {
             targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
 
 
+
             int i;
             for (i = 0; i < PlayersController.getNumberOfPlayers(); i++) {
                 if (PlayersController.getPlayerList().get(i).getSoldiers() > 0) {
