@@ -1,14 +1,44 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Playing {
 
-    GameBoardChecking boardChecking;
+
+    private GameBoardChecking boardChecking;
+    ////////////////////////////////////////////////////////
+    private Dice dice;
+
+    private int defenderLosses;
+    private int attackerLosses;
+    private Integer attackerLandId;
+    private Integer defenderLandId;
+    private int attackerDice;
+    private int defenderDice;
+    private ArrayList<Integer> attackerRolls;
+    private ArrayList<Integer> defenderRolls;
 
 
-    public void putTheBead(int landId){
+    public Integer getAttackerLandId() {
+        return attackerLandId;
+    }
+
+    public Integer getDefenderLandId() {
+        return defenderLandId;
+    }
+
+    public void setAttackerLandId(int attackerLandId) {
+        this.attackerLandId = attackerLandId;
+    }
+
+    public void setDefenderLandId(int defenderLandId) {
+        this.defenderLandId = defenderLandId;
+    }
+
+    ////////////////////////////////////////////////////////
+    public void putTheBead(int landId) {
+
         Player currentPlayer = PlayersController.getCurrentPlayer();
-
-        if(Map.getLandHashMap().get(landId).isConquered() == false){
+        if (Map.getLandHashMap().get(landId).isConquered() == false) {
 
             Map.getLandHashMap().get(landId).increaseSoldiers(1);
             Map.getLandHashMap().get(landId).setConqueror(currentPlayer);
@@ -16,16 +46,74 @@ public class Playing {
             currentPlayer.addLand(landId);
             System.out.println("method:put the bead :first if done");
 
-        }else if(currentPlayer.getConqueredLands().contains(landId)==true && currentPlayer.getSoldiers()>0){
+        } else if (currentPlayer.getConqueredLands().contains(landId) == true && currentPlayer.getSoldiers() > 0) {
             Map.getLandHashMap().get(landId).increaseSoldiers(1);
             currentPlayer.decreaseSoldiers(1);
             System.out.println(currentPlayer.getSoldiers());
             System.out.println("method:put the bead :second if done");
-        }
-
-        else {
+        } else {
             System.out.println("can not place the bead");
         }
 
     }
+
+    public void attack() {
+
+        if (boardChecking.getLandsWithAttackAbility().contains(attackerLandId)) {
+            if (boardChecking.getForeignNeighbors(attackerLandId).contains(defenderLandId)) {
+
+                calcuteAttackerDice();
+                calcuteDefenderDice();
+                attackerLosses = 0;
+                defenderLosses = 0;
+                attackerRolls = dice.roll(attackerDice);
+                defenderRolls = dice.roll(defenderDice);
+                Collections.sort(attackerRolls);
+                Collections.reverse(attackerRolls);
+                Collections.sort(defenderRolls);
+                Collections.reverse(defenderRolls);
+
+                for (int i = 0; i < defenderDice; i++) {
+                    if (defenderRolls.get(i) >= attackerRolls.get(i)) {
+                        attackerLosses++;
+                    } else {
+                        defenderLosses++;
+                    }
+                }
+
+                Land attackerLand = Map.getLandHashMap().get(attackerLandId);
+                Land defenderLand = Map.getLandHashMap().get(defenderLandId);
+                attackerLand.decreaseSoldiers(attackerLosses);
+                defenderLand.decreaseSoldiers(defenderLosses);
+
+                Player attacker = Map.getLandHashMap().get(attackerLandId).getConqueror();
+                if (defenderLand.getNumberSoldiers() <= 0) {
+                    defenderLand.setConqueror(attacker);
+                    defenderLand.setNumberSoldiers(attackerDice - attackerLosses);
+                }
+
+                // Player defender = Map.getLandHashMap().get(defenderLandId).getConqueror();
+            }
+        }
+
+    }
+
+    public void calcuteAttackerDice() {
+
+        if (Map.getLandHashMap().get(attackerLandId).getNumberSoldiers() >= 4) {
+            attackerDice = 3;
+        } else {
+            attackerDice = Map.getLandHashMap().get(attackerLandId).getNumberSoldiers() - 1;
+        }
+    }
+
+    public void calcuteDefenderDice() {
+
+        if (Map.getLandHashMap().get(defenderLandId).getNumberSoldiers() >= 2) {
+            defenderDice = 2;
+        } else {
+            defenderDice = 1;
+        }
+    }
+
 }

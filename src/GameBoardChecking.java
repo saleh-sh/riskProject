@@ -2,9 +2,18 @@ import java.util.ArrayList;
 
 public class GameBoardChecking {
 
-    public void updateNumOfSoldiersReceived(Player currentPlayer) {
+    private ArrayList<Integer> landsWithAttackAbility;
+    private  ArrayList<Integer> landsWithForeignNeighbor;
 
-        System.out.println("game board checking : update num of soldiers recived method");
+    public ArrayList<Integer> getLandsWithForeignNeighbor() {
+        return landsWithForeignNeighbor;
+    }
+
+    public ArrayList<Integer> getLandsWithAttackAbility() {
+        return landsWithAttackAbility;
+    }
+
+    public void updateNumOfSoldiersReceived(Player currentPlayer) {
 
         if (searchForAsia(currentPlayer)) {
             currentPlayer.increaseSoldiers(Map.getAsia().getPrizeSoldier());
@@ -23,6 +32,7 @@ public class GameBoardChecking {
         }
 
         currentPlayer.increaseSoldiers(currentPlayer.getConqueredLands().size() / 3);
+        System.out.println("new soldiers: "+PlayersController.getCurrentPlayer().getSoldiers());
     }
 
     public boolean searchForAsia(Player currentPlayer) {
@@ -69,7 +79,7 @@ public class GameBoardChecking {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void canAttack(Player currentPlayer) {
 
-        ArrayList<Integer> landsWithAttackAbility = new ArrayList<>();
+        landsWithAttackAbility = new ArrayList<>();
         for (int i = 0; i < currentPlayer.getConqueredLands().size(); i++) {
             int landIdInIndexI = currentPlayer.getConqueredLands().get(i);
             if (Map.getLandHashMap().get(landIdInIndexI).getNumberSoldiers() > 1) {
@@ -85,7 +95,7 @@ public class GameBoardChecking {
 
 
     public ArrayList<Integer> getForeignNeighbors(int landId) {
-        ArrayList<Integer> landsWithForeignNeighbor = new ArrayList<>();
+         landsWithForeignNeighbor = new ArrayList<>();
 
         for (int neighborId : Map.getNeighbors(landId)) {
             if (Map.getLandHashMap().get(landId).getConqueror().equals(Map.getLandHashMap().get(neighborId).getConqueror()) == false) {
@@ -95,5 +105,7 @@ public class GameBoardChecking {
         System.out.println("add foreign neighbor for the land");
         return landsWithForeignNeighbor;
     }
+
+
 
 }

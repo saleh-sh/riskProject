@@ -1,18 +1,17 @@
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Player {
 
     private final String name;
-    private final String icon;
+    private final String color;
     private int soldiers;
 
     private ArrayList<Integer> conqueredLands;
 
     public Player(String name, int soldiers,String icon) {
         this.name = name;
-        this.icon = icon;
+        this.color = icon;
         this.soldiers = soldiers;
         conqueredLands = new ArrayList<>();
     }
@@ -21,8 +20,8 @@ public class Player {
         return name;
     }
 
-    public String getIcon() {
-        return icon;
+    public String getColor() {
+        return color;
     }
 
     public int getSoldiers() {

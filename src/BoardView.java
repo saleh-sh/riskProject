@@ -1,15 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BoardView extends JFrame {
-
-    GameMapController gameMapController = new GameMapController(new Playing(),this,new GamePhase());
-
+private Color attackerColor;
+    GameMapController gameMapController = new GameMapController(new Playing(), this, new GamePhase());
+    private GameBoardChecking boardChecking;
     private LandButton[][] landButtons;
     private HashMap<Integer, LandButton> landButtonMap;
 
-    JPanel gameMap;
+    private JPanel gameMap;
 
 
     private JPanel stageOfGamePanel;
@@ -37,7 +38,8 @@ public class BoardView extends JFrame {
         this.setVisible(true);
 
     }
-////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+    ////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public JLabel getNumberOfReadySoldiers() {
         return numberOfReadySoldiers;
     }
@@ -50,6 +52,9 @@ public class BoardView extends JFrame {
         return currentPlayerIcon;
     }
 
+    public JPanel getNumberOfSoldiersPanel() {
+        return numberOfSoldiersPanel;
+    }
 
     /////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public LandButton getLandButtonByID(int id) {
@@ -97,7 +102,7 @@ public class BoardView extends JFrame {
         for (int i = 0; i < Map.getMapLength(); i++) {
             for (int j = 0; j < Map.getMapWidth(); j++) {
                 if (Map.getLands()[i][j] != null) {
-                    String icon = Map.getLandByCoordinates(i, j).getConqueror().getIcon();
+                    String icon = Map.getLandByCoordinates(i, j).getConqueror().getColor();
                     String text = "" + Map.getLandByCoordinates(i, j).getNumberSoldiers();
                     ImageIcon imageIcon = new ImageIcon(icon + ".jpg");
                     landButtons[i][j].setIcon(imageIcon);
@@ -160,7 +165,7 @@ public class BoardView extends JFrame {
         numberOfReadySoldiers.setFont(new Font("Algerian", Font.BOLD, 20));
 
         label = new JLabel();
-        String iconAddress = "" + PlayersController.getCurrentPlayer().getIcon();
+        String iconAddress = "" + PlayersController.getCurrentPlayer().getColor();
         currentPlayerIcon = new ImageIcon(iconAddress + ".jpg");
         label.setIcon(currentPlayerIcon);
 
@@ -176,6 +181,31 @@ public class BoardView extends JFrame {
         JPanel dicePanel = new JPanel();
     }*/
 
+
+    public void showLandsWithAttackAbility() {
+
+        boardChecking = new GameBoardChecking();
+        ArrayList<Integer> landsWithAttackAbility = boardChecking.getLandsWithAttackAbility();
+        for (int i = 0; i < Map.getMapLength(); i++) {
+            for (int j = 0; j < Map.getMapWidth(); j++) {
+                if (landsWithAttackAbility.contains(landButtons[i][j].getId())) {
+                    landButtons[i][j].setBackground(Color.WHITE);
+                }
+            }
+
+        }
+    }
+/*
+    public void returnPreviousState() {
+        for (int i = 0; i < Map.getMapLength(); i++) {
+            for (int j = 0; j < Map.getMapWidth(); j++) {
+                if (landButtons[i][j].getBackground().equals(Color.WHITE)) {
+                    landButtons[i][j].setBackground();
+                }
+            }
+
+        }
+    }*/
 }
 
 class LandButton extends JButton {
