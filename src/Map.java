@@ -54,16 +54,16 @@ public class Map {
     public static ArrayList<Integer> getNeighbors(int id) {
 
         ArrayList<Integer> neighborsId = new ArrayList<>();
-        if (landHashMap.get(id).getCoordinates().x - 1 >= 0 && landHashMap.containsKey(id - mapWidth)) {
+        if (landHashMap.containsKey(id - mapWidth)) {
             neighborsId.add(id - mapWidth);
         }
-        if (landHashMap.get(id).getCoordinates().x + 1 <= 6 && landHashMap.containsKey(id + mapWidth)) {
+        if (landHashMap.containsKey(id + mapWidth)) {
             neighborsId.add(id + mapWidth);
         }
-        if (landHashMap.get(id).getCoordinates().y - 1 >= 0 && landHashMap.containsKey(id - 1)) {
+        if (landHashMap.containsKey(id - 1) && (id -1) % mapWidth != 0) {
             neighborsId.add(id - 1);
         }
-        if (landHashMap.get(id).getCoordinates().y + 1 <= 5 && landHashMap.containsKey(id + 1)) {
+        if (landHashMap.containsKey(id + 1) && id % mapWidth != 0) {
             neighborsId.add(id + 1);
         }
         return neighborsId;

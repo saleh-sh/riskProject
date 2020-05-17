@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 public class RiskView extends JFrame {
 
@@ -14,54 +15,42 @@ public class RiskView extends JFrame {
         setExtendedState(MAXIMIZED_BOTH);
         setUndecorated(true);
         setResizable(false);
-        ///با بستن این فریم برنامه متوقف می شود
-//setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        add(menu());
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
+
+        setMenuButton();
+
         setVisible(true);
     }
 
-
-    public JPanel menu() {
-
-        menu = new JPanel();
-
-        background = new JLabel();
-        Icon backgroundIMG = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\Logo.jpg");
-        background.setIcon(backgroundIMG);
+    public void setMenuButton() {
 
         playNow = new JButton();
-        playNow.setBounds(840, 500, 140, 130);
-        Icon playNowIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\playNow.png");
+        playNow.setBounds(850, 430, 183, 80);
+        Icon playNowIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\start.jpg");
         playNow.setIcon(playNowIcon);
-        //************************
-        //playNow.setLayout(null);
-        //************************
-        playNow.setVisible(true);
 
         exit = new JButton();
-        exit.setBounds(1600, 900, 300, 140);
-        Icon exitIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\exit.png");
+        exit.setBounds(1600, 900, 142, 60);
+        Icon exitIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\exit.jpg");
         exit.setIcon(exitIcon);
-        //************************
-        //exit.setLayout(null);
-        //************************
-        exit.setVisible(true);
+        exit.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
 
-        background.add(exit);
-        background.add(playNow);
-        menu.add(background);
-
-        return menu;
+        this.add(exit);
+        this.add(playNow);
     }
 }
 
-//**********************************************************************************************************************
-
 class PlayerCount extends JFrame {
 
-    private JPanel PCoountPanel;
-    private JComboBox playerCount;
-    private JLabel background;
+    private JButton twoPlayer;
+    private JButton threePlayer;
+    private JButton fourPlayer;
 
     public PlayerCount() {
 
@@ -69,79 +58,108 @@ class PlayerCount extends JFrame {
         setExtendedState(MAXIMIZED_BOTH);
         setUndecorated(true);
         setResizable(false);
-        // use for chage the location of a panel****************
-        // setLayout(new FlowLayout(1000,900,480));
-
-        add(registering());//,BorderLayout.CENTER);
+        setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
+        setPlayerCount();
         setVisible(true);
     }
 
-    private JPanel registering() {
-
-        PCoountPanel = new JPanel();
-
-
-        // registering.setPreferredSize(new Dimension(500,500));
-        // registering.setLocation(2000,100);
-        PCoountPanel.setBackground(Color.BLACK);
-        background = new JLabel();
-        Icon backgroundIMG = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\Logo.jpg");
-        background.setIcon(backgroundIMG);
-
-
-        Integer[] numberOfPlayers = {2, 3, 4};
-        playerCount = new JComboBox(numberOfPlayers);
-        //for FlowLaout in frame
-        //for chage the size of a comboBox*********************
-        // playerCount.setPreferredSize(new Dimension(100,30));
-        playerCount.setBounds(950, 400, 100, 40);
-        playerCount.setVisible(true);
+    private void setPlayerCount() {
 
         JLabel measage = new JLabel("select the number of players");
-        measage.setBounds(730, 220, 600, 300);
-        measage.setFont(new Font("Calibri", Font.BOLD, 50));
-        measage.setVisible(true);
+        measage.setBounds(500, 220, 900, 300);
+        measage.setForeground(Color.WHITE);
+        measage.setFont(new Font("Algerian", Font.BOLD, 50));
+
+        twoPlayer = new JButton();
+        twoPlayer.setBounds(570, 500, 115, 115);
+        ImageIcon twoPlayerIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\twoPlayer.png");
+        twoPlayer.setIcon(twoPlayerIcon);
+
+        threePlayer = new JButton();
+        threePlayer.setBounds(870, 500, 115, 110);
+        ImageIcon threePlayerIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\threePlayer.png");
+        threePlayer.setIcon(threePlayerIcon);
+
+        fourPlayer = new JButton();
+        fourPlayer.setBounds(1200, 500, 115, 115);
+        ImageIcon fourPlayerIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\fourPlayer.png");
+        fourPlayer.setIcon(fourPlayerIcon);
 
         JButton nextButton = new JButton("next");
-        nextButton.setBounds(950, 500, 105, 100);
+        nextButton.setBounds(870, 700, 114, 105);
         Icon nextIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\next.png");
         nextButton.setIcon(nextIcon);
-        nextButton.setVisible(true);
 
         JButton backButton = new JButton("back");
-        backButton.setBounds(100, 900, 105, 120);
+        backButton.setBounds(100, 900, 114, 95);
         Icon backIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\back.png");
         backButton.setIcon(backIcon);
-        backButton.setVisible(true);
 
-
-        background.add(playerCount);
-        background.add(measage);
-        background.add(nextButton);
-        background.add(backButton);
-        PCoountPanel.add(background);
-        // registering.add(playerCount);
-        return PCoountPanel;
+        this.add(measage);
+        this.add(nextButton);
+        this.add(twoPlayer);
+        this.add(threePlayer);
+        this.add(fourPlayer);
+        this.add(backButton);
     }
 }
 
-class Registering {
-    private int playerCount;
-    String[] playersName;
+class SettingPlayersName extends JFrame {
 
-    public Registering() {
+    private int playerCount;
+    private JTextField playerOneName;
+    private JTextField playerTwoName;
+    private JTextField playerThreeName;
+    private JTextField playerFourName;
+    private JButton nextButton;
+    private JButton backButton;
+
+    public SettingPlayersName() {
+
 
         this.playerCount = PlayersController.getNumberOfPlayers();
-        playersName = new String[playerCount];
-        for (int i = 0; i < playerCount; i++) {
-            playersName[i] = JOptionPane.showInputDialog("Enter the name of player " + (i + 1) + ":");
-            System.out.println(playersName[i]);
+        setExtendedState(MAXIMIZED_BOTH);
+        setUndecorated(true);
+        setResizable(false);
+        setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
+        setPlayersName();
+        setVisible(true);
+    }
+
+    public void setPlayersName() {
+
+        playerOneName = new JTextField("player one");
+        playerOneName.setBounds(750, 400, 400, 80);
+        playerOneName.setFont(new Font("Algerian", Font.BOLD, 50));
+        this.add(playerOneName);
+        playerTwoName = new JTextField("player two");
+        playerTwoName.setBounds(750, 500, 400, 80);
+        playerTwoName.setFont(new Font("Algerian", Font.BOLD, 50));
+        this.add(playerTwoName);
+        if (playerCount == 3 || playerCount == 4) {
+            playerThreeName = new JTextField("player three");
+            playerThreeName.setBounds(750, 600, 400, 80);
+            playerThreeName.setFont(new Font("Algerian", Font.BOLD, 50));
+            this.add(playerThreeName);
         }
+
+        if (playerCount >=3) {
+            playerFourName = new JTextField("player four");
+            playerFourName.setBounds(750, 700, 400, 80);
+            playerFourName.setFont(new Font("Algerian", Font.BOLD, 50));
+            this.add(playerFourName);
+        }
+
+        nextButton = new JButton("next");
+        nextButton.setBounds(1700, 900, 114, 95);
+        Icon nextIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\next.png");
+        nextButton.setIcon(nextIcon);
+        this.add(nextButton);
+
+        JButton backButton = new JButton("back");
+        backButton.setBounds(100, 900, 114, 95);
+        Icon backIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\back.png");
+        backButton.setIcon(backIcon);
+        this.add(backButton);
     }
 }
-
-
-
-
-
-

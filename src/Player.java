@@ -1,17 +1,18 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Player {
 
     private final String name;
-    private final String color;
+    private final String icon;
     private int soldiers;
 
     private ArrayList<Integer> conqueredLands;
 
     public Player(String name, int soldiers,String icon) {
         this.name = name;
-        this.color = icon;
+        this.icon = icon;
         this.soldiers = soldiers;
         conqueredLands = new ArrayList<>();
     }
@@ -20,8 +21,8 @@ public class Player {
         return name;
     }
 
-    public String getColor() {
-        return color;
+    public String getIcon() {
+        return icon;
     }
 
     public int getSoldiers() {
@@ -66,12 +67,15 @@ public class Player {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Player player = (Player) o;
-        return name.equals(player.name);
+        return soldiers == player.soldiers &&
+                name.equals(player.name) &&
+                icon.equals(player.icon) &&
+                conqueredLands.equals(player.conqueredLands);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, icon, soldiers, conqueredLands);
     }
 }
 

@@ -1,10 +1,23 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GameBoardChecking {
 
     private ArrayList<Integer> landsWithAttackAbility;
-    private  ArrayList<Integer> landsWithForeignNeighbor;
+    private ArrayList<Integer> landsWithForeignNeighbor;
+    //////////////////////////////////////////////////
+    private HashSet<Integer> landsWithFortifyAbility = new HashSet<>();
+    private HashSet<Integer> destinationsID = new HashSet<>();
 
+    public HashSet<Integer> getDestinationsID() {
+        return destinationsID;
+    }
+
+    public HashSet<Integer> getLandsWithFortifyAbility() {
+        return landsWithFortifyAbility;
+    }
+
+    //////////////////////////////////////////////////
     public ArrayList<Integer> getLandsWithForeignNeighbor() {
         return landsWithForeignNeighbor;
     }
@@ -32,7 +45,7 @@ public class GameBoardChecking {
         }
 
         currentPlayer.increaseSoldiers(currentPlayer.getConqueredLands().size() / 3);
-        System.out.println("new soldiers: "+PlayersController.getCurrentPlayer().getSoldiers());
+        System.out.println("new soldiers: " + PlayersController.getCurrentPlayer().getSoldiers());
     }
 
     public boolean searchForAsia(Player currentPlayer) {
@@ -87,6 +100,7 @@ public class GameBoardChecking {
                     if (currentPlayer.getConqueredLands().contains(neighborID) == false) {
                         landsWithAttackAbility.add(landIdInIndexI);
                         System.out.println("add land with attack ability");
+                        break;
                     }
                 }
             }
@@ -95,7 +109,7 @@ public class GameBoardChecking {
 
 
     public ArrayList<Integer> getForeignNeighbors(int landId) {
-         landsWithForeignNeighbor = new ArrayList<>();
+        landsWithForeignNeighbor = new ArrayList<>();
 
         for (int neighborId : Map.getNeighbors(landId)) {
             if (Map.getLandHashMap().get(landId).getConqueror().equals(Map.getLandHashMap().get(neighborId).getConqueror()) == false) {
@@ -105,7 +119,53 @@ public class GameBoardChecking {
         System.out.println("add foreign neighbor for the land");
         return landsWithForeignNeighbor;
     }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\
+    public void findLandsWithFortifyAbility() {
 
+        for (int i = 0; i < Map.getMapLength(); i++) {
+            for (int j = 0; j < Map.getMapWidth(); j++) {
+                if (Map.getLands()[i][j] != null)
+                    if (Map.getLands()[i][j].getConqueror().equals(PlayersController.getCurrentPlayer())) {
+                        findThePath(Map.getLands()[i][j].getLandID());
+                    }
+            }
+        }
+    }
 
+    public void findThePath(int landId) {
+
+        for (int neighborId : Map.getNeighbors(landId)) {
+            if (Map.getLandHashMap().get(landId).getConqueror().equals(Map.getLandHashMap().get(neighborId).getConqueror())) {
+                if (landsWithFortifyAbility.contains(neighborId) == false) {
+                    landsWithFortifyAbility.add(neighborId);
+                    findThePath(neighborId);
+                }
+            }
+        }
+    }
+
+    public void findDestinations(int sourceId){
+
+        for (int neighborId : Map.getNeighbors(sourceId)) {
+            if (Map.getLandHashMap().get(sourceId).getConqueror().equals(Map.getLandHashMap().get(neighborId).getConqueror())) {
+                if (destinationsID.contains(neighborId) == false) {
+                    destinationsID.add(neighborId);
+                    findDestinations(neighborId);
+                }
+            }
+        }
+    }
+
+    public boolean canFortify(int sourceId,int destinationId){
+        findLandsWithFortifyAbility();
+        if(!landsWithFortifyAbility.contains(sourceId)) {
+            return false;
+        }
+        findDestinations(sourceId);
+        if (!destinationsID.contains(destinationId)){
+            return false;
+        }
+        return true;
+    }
 
 }

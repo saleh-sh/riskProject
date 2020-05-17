@@ -2,7 +2,7 @@ import java.awt.*;
 
 public class Land {
     private final int landID;
-    private final Point coordinates;
+    //private final Point coordinates;
     private int soldiers;
     private boolean isConquered;
     private Player conqueror;
@@ -10,7 +10,7 @@ public class Land {
 
     public Land(int landID) {
         this.landID = landID;
-        this.coordinates = new Point(landID / Map.getMapLength(), landID / Map.getMapWidth());
+       // this.coordinates = new Point(landID / Map.getMapLength(), landID % Map.getMapLength() - 1);
         this.soldiers = 0;
         this.isConquered = false;
     }
@@ -19,9 +19,9 @@ public class Land {
         return landID;
     }
 
-    public Point getCoordinates() {
+    /*public Point getCoordinates() {
         return coordinates;
-    }
+    }*/
 
     public void setNumberSoldiers(int soldiers) {
         this.soldiers = soldiers;

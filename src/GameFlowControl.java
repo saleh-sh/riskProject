@@ -28,29 +28,30 @@ public class GameFlowControl {
                 gamePhase.setCanReinforce(true);
                 PlayersController.findCurrentPlayer();
                 boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
-                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getColor() + ".jpg"));
+                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
                 boardView.getNumberOfReadySoldiers().setText("ready soldiers: " + PlayersController.getCurrentPlayer().getSoldiers());
 
             } else {
                 PlayersController.findCurrentPlayer();
-                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getColor() + ".jpg"));
+                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
                 boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
                 System.out.println("soldiers count update in put the bead phase");
             }
         } else if (gamePhase.isCanReinforce()) {
             if (PlayersController.getCurrentPlayer().getSoldiers() != 0) {
-                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getColor() + ".jpg"));
+                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
                 boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
                 System.out.println("soldiers count update in rein force phase");
             } else {
                 gamePhase.setCanReinforce(false);
                 System.out.println("reinforce false");
+
+
                 gamePhase.setCanAttack(true);
+                //boardView.showLandsWithAttackAbility();
                 boardView.getNumberOfSoldiersPanel().setVisible(false);
-                boardView.showLandsWithAttackAbility();
             }
         } else if (gamePhase.isCanAttack()) {
-
 
         }
 

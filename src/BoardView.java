@@ -2,11 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class BoardView extends JFrame {
-private Color attackerColor;
-    GameMapController gameMapController = new GameMapController(new Playing(), this, new GamePhase());
-    private GameBoardChecking boardChecking;
+Playing playing = new Playing();
+GamePhase gamePhase = new GamePhase();
+    GameMapController gameMapController = new GameMapController(playing, this, gamePhase);
+    private GameBoardChecking boardChecking =new GameBoardChecking();
+
     private LandButton[][] landButtons;
     private HashMap<Integer, LandButton> landButtonMap;
 
@@ -24,7 +27,27 @@ private Color attackerColor;
     private JLabel numberOfReadySoldiers;
     private JLabel label;
     private ImageIcon currentPlayerIcon;
+/////////////////////////////////////////////////
+    private JPanel dicePanel;
+    private JButton[] attackerRollsB;
+    private JButton[] defenderRollsB;
+    private ImageIcon[] diceIcons;
 
+    public JPanel getDicePanel() {
+        return dicePanel;
+    }
+
+    public JButton[] getAttackerRollsB() {
+        return attackerRollsB;
+    }
+
+    public JButton[] getDefenderRollsB() {
+        return defenderRollsB;
+    }
+
+    public ImageIcon[] getDiceIcons() {
+        return diceIcons;
+    }
 
     public BoardView() {
 
@@ -35,8 +58,8 @@ private Color attackerColor;
         this.add(gameMap());
         this.add(showStageOfGamePanel());
         this.add(showNumberOfReadySoldiers());
+        this.add(showDicePanel());
         this.setVisible(true);
-
     }
 
     ////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -102,7 +125,7 @@ private Color attackerColor;
         for (int i = 0; i < Map.getMapLength(); i++) {
             for (int j = 0; j < Map.getMapWidth(); j++) {
                 if (Map.getLands()[i][j] != null) {
-                    String icon = Map.getLandByCoordinates(i, j).getConqueror().getColor();
+                    String icon = Map.getLandByCoordinates(i, j).getConqueror().getIcon();
                     String text = "" + Map.getLandByCoordinates(i, j).getNumberSoldiers();
                     ImageIcon imageIcon = new ImageIcon(icon + ".jpg");
                     landButtons[i][j].setIcon(imageIcon);
@@ -137,7 +160,8 @@ private Color attackerColor;
         nextButton.setFont(new Font("Algerian", Font.BOLD, 20));
         nextButton.setPreferredSize(new Dimension(200, 60));
         nextButton.setActionCommand("nextStage");
-        // nextButton.addActionListener();
+        //
+        //nextButton.addActionListener(new StagePanelController(gamePhase,this));
 
 
         stageOfGamePanel.add(reinforceLabel);
@@ -165,7 +189,7 @@ private Color attackerColor;
         numberOfReadySoldiers.setFont(new Font("Algerian", Font.BOLD, 20));
 
         label = new JLabel();
-        String iconAddress = "" + PlayersController.getCurrentPlayer().getColor();
+        String iconAddress = "" + PlayersController.getCurrentPlayer().getIcon();
         currentPlayerIcon = new ImageIcon(iconAddress + ".jpg");
         label.setIcon(currentPlayerIcon);
 
@@ -176,15 +200,37 @@ private Color attackerColor;
         return numberOfSoldiersPanel;
     }
 
-  /*  public JPanel showDicePanel() {
+   public JPanel showDicePanel() {
 
-        JPanel dicePanel = new JPanel();
-    }*/
+         dicePanel = new JPanel();
+         dicePanel.setBounds(20,80,260,280);
+         dicePanel.setBackground(Color.BLACK);
+         dicePanel.setLayout(null);
+
+         attackerRollsB = new JButton[playing.getAttackerDice()];
+         defenderRollsB = new JButton[playing.getDefenderDice()];
+
+         for(int i=0;i<attackerRollsB.length;i++){
+             attackerRollsB[i] = new JButton("attacker");
+             attackerRollsB[i].setBounds(30,70*(i+1),83,60);
+             attackerRollsB[i].setActionCommand("attacker button");
+             attackerRollsB[i].addActionListener(new dicePanelController(this,playing));
+             dicePanel.add(attackerRollsB[i]);
+         }
+         for (int j=0;j<defenderRollsB.length;j++){
+             defenderRollsB[j] = new JButton("defender");
+             defenderRollsB[j].setBounds(140,70*(j+1),84,60);
+             defenderRollsB[j].setActionCommand("defender button");
+             dicePanel.add(defenderRollsB[j]);
+         }
+         return dicePanel;
+    }
 
 
     public void showLandsWithAttackAbility() {
 
-        boardChecking = new GameBoardChecking();
+        //boardChecking = new GameBoardChecking();
+        //boardChecking.canAttack(PlayersController.getCurrentPlayer());
         ArrayList<Integer> landsWithAttackAbility = boardChecking.getLandsWithAttackAbility();
         for (int i = 0; i < Map.getMapLength(); i++) {
             for (int j = 0; j < Map.getMapWidth(); j++) {
@@ -195,17 +241,55 @@ private Color attackerColor;
 
         }
     }
-/*
+
     public void returnPreviousState() {
         for (int i = 0; i < Map.getMapLength(); i++) {
             for (int j = 0; j < Map.getMapWidth(); j++) {
-                if (landButtons[i][j].getBackground().equals(Color.WHITE)) {
-                    landButtons[i][j].setBackground();
+                if (landButtons[i][j].getBackground().equals(Color.WHITE) || landButtons[i][j].getBackground().equals(Color.DARK_GRAY)) {
+                    int landButtonsId = landButtons[i][j].getId();
+                    if (Map.getAsia().getLands().contains(landButtonsId)) {
+                        landButtons[i][j].setBackground(Color.green);
+                    } else if (Map.getAfrica().getLands().contains(landButtonsId)) {
+                        landButtons[i][j].setBackground(Color.yellow);
+                    } else if (Map.getAmerica().getLands().contains(landButtonsId)) {
+                        landButtons[i][j].setBackground(Color.black);
+                    } else if (Map.getEurope().getLands().contains(landButtonsId)) {
+                        landButtons[i][j].setBackground(Color.RED);
+                    }
                 }
             }
 
         }
-    }*/
+    }
+/*
+    public void showForeignNeighborsOfLand(int landId) {
+        //////////////////////////
+        //ArrayList<Integer> neighborsId = boardChecking.getForeignNeighbors(landId);
+        //////////////////////////
+        for (int i = 0; i < neighborsId.size(); i++) {
+            landButtonMap.get(neighborsId.get(i)).setBackground(Color.DARK_GRAY);
+        }
+    }
+*/
+    public void showLandsWithFortifyAbility(){
+        boardChecking.findLandsWithFortifyAbility();
+        HashSet<Integer> landsWithFortifyAbility = boardChecking.getLandsWithFortifyAbility();
+        for(int i=0;i<Map.getMapLength();i++){
+            for(int j=0;j<Map.getMapWidth();j++){
+                if(landsWithFortifyAbility.contains(landButtons[i][j].getId())){
+                    landButtons[i][j].setBackground(Color.WHITE);
+                }
+            }
+        }
+    }
+
+    public void showDestinations(int sourceId){
+        boardChecking.findDestinations(sourceId);
+        HashSet<Integer> destinationsId = boardChecking.getDestinationsID();
+        for(int destinationId : destinationsId){
+            landButtonMap.get(destinationId).setBackground(Color.DARK_GRAY);
+        }
+    }
 }
 
 class LandButton extends JButton {

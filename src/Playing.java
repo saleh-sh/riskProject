@@ -17,6 +17,40 @@ public class Playing {
     private ArrayList<Integer> attackerRolls;
     private ArrayList<Integer> defenderRolls;
 
+    private Integer sourceId;
+    private Integer destinationId;
+
+    public ArrayList<Integer> getAttackerRolls() {
+        return attackerRolls;
+    }
+
+    public ArrayList<Integer> getDefenderRolls() {
+        return defenderRolls;
+    }
+
+    public int getAttackerDice() {
+        return attackerDice;
+    }
+
+    public int getDefenderDice() {
+        return defenderDice;
+    }
+
+    public Integer getSourceId() {
+        return sourceId;
+    }
+
+    public Integer getDestinationId() {
+        return destinationId;
+    }
+
+    public void setSourceId(Integer sourceId) {
+        this.sourceId = sourceId;
+    }
+
+    public void setDestinationId(Integer destinationId) {
+        this.destinationId = destinationId;
+    }
 
     public Integer getAttackerLandId() {
         return attackerLandId;
@@ -66,6 +100,7 @@ public class Playing {
                 calcuteDefenderDice();
                 attackerLosses = 0;
                 defenderLosses = 0;
+                dice = new Dice();
                 attackerRolls = dice.roll(attackerDice);
                 defenderRolls = dice.roll(defenderDice);
                 Collections.sort(attackerRolls);
@@ -96,6 +131,15 @@ public class Playing {
             }
         }
 
+    }
+
+    public void fortify() {
+
+        Land source = Map.getLandHashMap().get(sourceId);
+        Land destination = Map.getLandHashMap().get(destinationId);
+
+        source.decreaseSoldiers(1);
+        destination.increaseSoldiers(1);
     }
 
     public void calcuteAttackerDice() {
