@@ -2,10 +2,10 @@ import javax.swing.*;
 
 public class GameFlowControl {
 
-    GamePhase gamePhase;
-    BoardView boardView;
-    Playing playing;
-    GameBoardChecking boardChecking = new GameBoardChecking();
+    private GamePhase gamePhase;
+    private BoardView boardView;
+    private Playing playing;
+    private GameBoardChecking boardChecking = new GameBoardChecking();
 
     public GameFlowControl(GamePhase gamePhase, BoardView boardView, Playing playing) {
         this.gamePhase = gamePhase;

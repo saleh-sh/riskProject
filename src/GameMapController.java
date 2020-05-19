@@ -7,10 +7,10 @@ import java.util.Arrays;
 
 public class GameMapController implements ActionListener {
 
-    Playing playing;
-    BoardView boardView;
-    GamePhase gamePhase;
-    GameFlowControl gameFlowControl;
+    private Playing playing;
+    private BoardView boardView;
+    private GamePhase gamePhase;
+    private GameFlowControl gameFlowControl;
 
     public GameMapController(Playing playing, BoardView boardView, GamePhase gamePhase) {
         this.playing = playing;
@@ -30,29 +30,6 @@ public class GameMapController implements ActionListener {
             targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
             gameFlowControl.controlGameFLow();
 
-/*
-            int i;
-            for (i = 0; i < PlayersController.getNumberOfPlayers(); i++) {
-                if (PlayersController.getPlayerList().get(i).getSoldiers() > 0) {
-                    break;
-                }
-            }
-            if (i >= PlayersController.getNumberOfPlayers()) {
-                gamePhase.setPutBeadPhase(false);
-                ////////////////////////////////////////////////////////////////////////////////////////////////////////
-                gamePhase.setCanReinforce(true);
-                PlayersController.findCurrentPlayer();
-                boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
-                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
-                boardView.getNumberOfReadySoldiers().setText("ready soldiers: " + PlayersController.getCurrentPlayer().getSoldiers());
-
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////
-            } else {
-                PlayersController.findCurrentPlayer();
-                boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
-                boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
-                System.out.println("soldiers count update in put the bead phase");
-            }*/
         } else if (gamePhase.isCanAttack()) {
 
             if (playing.getAttackerLandId() == null) {
@@ -105,8 +82,8 @@ class StagePanelController implements ActionListener {
 
 class dicePanelController implements ActionListener {
 
-    BoardView boardView;
-    Playing playing;
+    private BoardView boardView;
+    private Playing playing;
 
     public dicePanelController(BoardView boardView, Playing playing) {
         this.boardView = boardView;
@@ -125,11 +102,26 @@ class dicePanelController implements ActionListener {
             boardView.getAttackerRollsB()[index].setText(null);
             boardView.getAttackerRollsB()[index].setIcon(diceIcon);
 
-        } else {
+
+            if (index + 1 < boardView.getAttackerRollsB().length) {
+                boardView.getAttackerRollsB()[index + 1].setEnabled(true);
+            }else {
+                boardView.getDefenderRollsB()[0].setEnabled(true);
+            }
+
+        }
+
+        if (actionCommand.equalsIgnoreCase("defender button")) {
             index = Arrays.asList(boardView.getDefenderRollsB()).indexOf(e.getSource());
             diceIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(index) + ".jpg");
             boardView.getDefenderRollsB()[index].setText(null);
             boardView.getDefenderRollsB()[index].setIcon(diceIcon);
+
+            if (index + 1 < boardView.getDefenderRollsB().length) {
+                boardView.getDefenderRollsB()[index + 1].setEnabled(true);
+            } else {
+                boardView.showRollResult();
+            }
         }
     }
 }

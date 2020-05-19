@@ -29,6 +29,12 @@ public class RiskView extends JFrame {
         playNow.setBounds(850, 430, 183, 80);
         Icon playNowIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\start.jpg");
         playNow.setIcon(playNowIcon);
+        playNow.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PlayerCount playerCount = new PlayerCount();
+            }
+        });
 
         exit = new JButton();
         exit.setBounds(1600, 900, 142, 60);
@@ -48,9 +54,14 @@ public class RiskView extends JFrame {
 
 class PlayerCount extends JFrame {
 
+    //private JButton nextButton;
+    private JButton backButton;
     private JButton twoPlayer;
     private JButton threePlayer;
     private JButton fourPlayer;
+
+    private SetPlayerCountController playerCountController;
+
 
     public PlayerCount() {
 
@@ -65,6 +76,8 @@ class PlayerCount extends JFrame {
 
     private void setPlayerCount() {
 
+        playerCountController = new SetPlayerCountController(this);
+
         JLabel measage = new JLabel("select the number of players");
         measage.setBounds(500, 220, 900, 300);
         measage.setForeground(Color.WHITE);
@@ -72,31 +85,41 @@ class PlayerCount extends JFrame {
 
         twoPlayer = new JButton();
         twoPlayer.setBounds(570, 500, 115, 115);
+        twoPlayer.setActionCommand("two player button");
+        twoPlayer.addActionListener(playerCountController);
         ImageIcon twoPlayerIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\twoPlayer.png");
         twoPlayer.setIcon(twoPlayerIcon);
 
         threePlayer = new JButton();
         threePlayer.setBounds(870, 500, 115, 110);
+        threePlayer.setActionCommand("three player button");
+        threePlayer.addActionListener(playerCountController);
         ImageIcon threePlayerIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\threePlayer.png");
         threePlayer.setIcon(threePlayerIcon);
 
         fourPlayer = new JButton();
         fourPlayer.setBounds(1200, 500, 115, 115);
+        fourPlayer.setActionCommand("four player button");
+        fourPlayer.addActionListener(playerCountController);
         ImageIcon fourPlayerIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\fourPlayer.png");
         fourPlayer.setIcon(fourPlayerIcon);
-
-        JButton nextButton = new JButton("next");
+/*
+        nextButton = new JButton("next");
         nextButton.setBounds(870, 700, 114, 105);
+        nextButton.setActionCommand("next button");
+        nextButton.addActionListener(playerCountController);
         Icon nextIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\next.png");
         nextButton.setIcon(nextIcon);
-
-        JButton backButton = new JButton("back");
+*/
+        backButton = new JButton("back");
         backButton.setBounds(100, 900, 114, 95);
+        backButton.addActionListener(playerCountController);
         Icon backIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\back.png");
         backButton.setIcon(backIcon);
+        backButton.setActionCommand("back button");
 
         this.add(measage);
-        this.add(nextButton);
+        //  this.add(nextButton);
         this.add(twoPlayer);
         this.add(threePlayer);
         this.add(fourPlayer);
@@ -114,6 +137,8 @@ class SettingPlayersName extends JFrame {
     private JButton nextButton;
     private JButton backButton;
 
+    private SettingPlayersNameController settingPlayersNameController;
+
     public SettingPlayersName() {
 
 
@@ -128,6 +153,7 @@ class SettingPlayersName extends JFrame {
 
     public void setPlayersName() {
 
+        settingPlayersNameController = new SettingPlayersNameController(this);
         playerOneName = new JTextField("player one");
         playerOneName.setBounds(750, 400, 400, 80);
         playerOneName.setFont(new Font("Algerian", Font.BOLD, 50));
@@ -143,7 +169,7 @@ class SettingPlayersName extends JFrame {
             this.add(playerThreeName);
         }
 
-        if (playerCount >=3) {
+        if (playerCount == 4) {
             playerFourName = new JTextField("player four");
             playerFourName.setBounds(750, 700, 400, 80);
             playerFourName.setFont(new Font("Algerian", Font.BOLD, 50));
@@ -152,14 +178,21 @@ class SettingPlayersName extends JFrame {
 
         nextButton = new JButton("next");
         nextButton.setBounds(1700, 900, 114, 95);
+        nextButton.setActionCommand("next button");
         Icon nextIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\next.png");
         nextButton.setIcon(nextIcon);
         this.add(nextButton);
 
-        JButton backButton = new JButton("back");
+        backButton = new JButton("back");
         backButton.setBounds(100, 900, 114, 95);
+        backButton.setActionCommand("back button");
         Icon backIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\back.png");
         backButton.setIcon(backIcon);
+        backButton.addActionListener(settingPlayersNameController);
         this.add(backButton);
+    }
+
+    public String[] getPlayersName(){
+        
     }
 }

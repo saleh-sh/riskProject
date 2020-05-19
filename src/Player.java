@@ -5,14 +5,14 @@ import java.util.Objects;
 public class Player {
 
     private final String name;
-    private final String icon;
+    private final String color;
     private int soldiers;
 
     private ArrayList<Integer> conqueredLands;
 
-    public Player(String name, int soldiers,String icon) {
+    public Player(String name, int soldiers,String color) {
         this.name = name;
-        this.icon = icon;
+        this.color = color;
         this.soldiers = soldiers;
         conqueredLands = new ArrayList<>();
     }
@@ -22,7 +22,7 @@ public class Player {
     }
 
     public String getIcon() {
-        return icon;
+        return color;
     }
 
     public int getSoldiers() {
@@ -41,22 +41,9 @@ public class Player {
         this.conqueredLands.add(id);
     }
 
-    public void removeLand(String landName) {
-        this.conqueredLands.remove(landName);
+    public void removeLand(int landId) {
+        this.conqueredLands.remove(landId);
     }
-
-  /*  public void addContinent(Continent continent) {
-
-        this.conqueredCont.put(continent.getName(), continent);
-    }*/
-
-   /* public void removeContinent(String continentName) {
-        this.conqueredCont.remove(continentName);
-    }*/
-
-   /* public ArrayList<Land> getOwnedLand() {
-        return new ArrayList<Land>(conqueredLands.values());
-    }*/
 
     public ArrayList<Integer> getConqueredLands() {
         return conqueredLands;
@@ -69,13 +56,13 @@ public class Player {
         Player player = (Player) o;
         return soldiers == player.soldiers &&
                 name.equals(player.name) &&
-                icon.equals(player.icon) &&
+                color.equals(player.color) &&
                 conqueredLands.equals(player.conqueredLands);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, icon, soldiers, conqueredLands);
+        return Objects.hash(name, color, soldiers, conqueredLands);
     }
 }
 

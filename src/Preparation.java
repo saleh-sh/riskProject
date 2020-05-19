@@ -3,20 +3,34 @@ import java.util.Collections;
 
 public class Preparation {
 
+    PlayersController playersController;
+    BoardView boardView;
 
-    public void divideLands(){
+    public void gameBoardPreparation(String[] playersName) {
+
+        playersController = new PlayersController();
+        playersController.createPlayers(playersName);
+        Map.createLands();
+        Map.setSeas();
+        PlayersController.findCurrentPlayer();
+        divideLands();
+        boardView = new BoardView();
+        boardView.showTheDivisionOfSoldiers();
+        boardView.showCurrentPlayer();
+    }
+
+    public void divideLands() {
 
         ArrayList<Land> lands = new ArrayList<>(Map.getLandHashMap().values());
         //ArrayList<Player> players = PlayersController.getPlayerList();
         ///////////////////////////////////////////////////////////////////////////////////////
-        ArrayList<Player> players = new ArrayList<>(PlayersController.getPlayersMap().values());
+        ArrayList<Player> players = new ArrayList<>(PlayersController.getPlayerList());
         ////////////////////////////////////////////////////////////////////////////////////////
-
         Collections.shuffle(lands);
         Collections.shuffle(players);
 
-        for(int i=0;i<lands.size();i++){
-            int playerIndex = i%PlayersController.getNumberOfPlayers();
+        for (int i = 0; i < lands.size(); i++) {
+            int playerIndex = i % PlayersController.getNumberOfPlayers();
 
             players.get(playerIndex).addLand(lands.get(i).getLandID());
             players.get(playerIndex).decreaseSoldiers(1);

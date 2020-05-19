@@ -12,6 +12,8 @@ public class Playing {
     private int attackerLosses;
     private Integer attackerLandId;
     private Integer defenderLandId;
+    private Player attacker;
+    private Player defender;
     private int attackerDice;
     private int defenderDice;
     private ArrayList<Integer> attackerRolls;
@@ -19,6 +21,7 @@ public class Playing {
 
     private Integer sourceId;
     private Integer destinationId;
+
 
     public ArrayList<Integer> getAttackerRolls() {
         return attackerRolls;
@@ -121,10 +124,15 @@ public class Playing {
                 attackerLand.decreaseSoldiers(attackerLosses);
                 defenderLand.decreaseSoldiers(defenderLosses);
 
-                Player attacker = Map.getLandHashMap().get(attackerLandId).getConqueror();
+                attacker = Map.getLandHashMap().get(attackerLandId).getConqueror();
+                defender = Map.getLandHashMap().get(defenderLandId).getConqueror();
+
                 if (defenderLand.getNumberSoldiers() <= 0) {
                     defenderLand.setConqueror(attacker);
                     defenderLand.setNumberSoldiers(attackerDice - attackerLosses);
+                    //سرزمین از دست رفته در لیست سرزمین های بازیکن باید حذف شود
+                    attacker.addLand(defenderLandId);
+                    defender.removeLand(defenderLandId);
                 }
 
                 // Player defender = Map.getLandHashMap().get(defenderLandId).getConqueror();

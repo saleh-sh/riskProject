@@ -3,11 +3,13 @@ import java.util.HashSet;
 
 public class GameBoardChecking {
 
+    private Playing playing;
     private ArrayList<Integer> landsWithAttackAbility;
     private ArrayList<Integer> landsWithForeignNeighbor;
     //////////////////////////////////////////////////
-    private HashSet<Integer> landsWithFortifyAbility = new HashSet<>();
-    private HashSet<Integer> destinationsID = new HashSet<>();
+    private HashSet<Integer> landsWithFortifyAbility;
+    private HashSet<Integer> destinationsID;
+
 
     public HashSet<Integer> getDestinationsID() {
         return destinationsID;
@@ -119,7 +121,8 @@ public class GameBoardChecking {
         System.out.println("add foreign neighbor for the land");
         return landsWithForeignNeighbor;
     }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\
     public void findLandsWithFortifyAbility() {
 
         for (int i = 0; i < Map.getMapLength(); i++) {
@@ -144,7 +147,7 @@ public class GameBoardChecking {
         }
     }
 
-    public void findDestinations(int sourceId){
+    public void findDestinations(int sourceId) {
 
         for (int neighborId : Map.getNeighbors(sourceId)) {
             if (Map.getLandHashMap().get(sourceId).getConqueror().equals(Map.getLandHashMap().get(neighborId).getConqueror())) {
@@ -156,16 +159,23 @@ public class GameBoardChecking {
         }
     }
 
-    public boolean canFortify(int sourceId,int destinationId){
+    public boolean canFortify(int sourceId, int destinationId) {
         findLandsWithFortifyAbility();
-        if(!landsWithFortifyAbility.contains(sourceId)) {
+        if (!landsWithFortifyAbility.contains(sourceId)) {
             return false;
         }
         findDestinations(sourceId);
-        if (!destinationsID.contains(destinationId)){
+        if (!destinationsID.contains(destinationId)) {
             return false;
         }
         return true;
+    }
+
+
+    public int getMaxSoldierForFortify() {
+
+        int numOfSoldiersInSource = Map.getLandHashMap().get(playing.getSourceId()).getNumberSoldiers();
+        return numOfSoldiersInSource - 1;
     }
 
 }

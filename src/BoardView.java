@@ -1,14 +1,17 @@
 import javax.swing.*;
+import javax.swing.border.EtchedBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class BoardView extends JFrame {
-Playing playing = new Playing();
-GamePhase gamePhase = new GamePhase();
+    Playing playing = new Playing();
+    GamePhase gamePhase = new GamePhase();
     GameMapController gameMapController = new GameMapController(playing, this, gamePhase);
-    private GameBoardChecking boardChecking =new GameBoardChecking();
+    private GameBoardChecking boardChecking = new GameBoardChecking();
 
     private LandButton[][] landButtons;
     private HashMap<Integer, LandButton> landButtonMap;
@@ -27,11 +30,42 @@ GamePhase gamePhase = new GamePhase();
     private JLabel numberOfReadySoldiers;
     private JLabel label;
     private ImageIcon currentPlayerIcon;
-/////////////////////////////////////////////////
+    /////////////////////////////////////////////////
     private JPanel dicePanel;
     private JButton[] attackerRollsB;
     private JButton[] defenderRollsB;
-    private ImageIcon[] diceIcons;
+    /////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    private JPanel timePanel;
+    private JLabel secondsLabel;
+    private JLabel minutesLabel;
+    private JLabel hoursLabel;
+    private MeasurementOfTimeElapsed MTimeElapsed = new MeasurementOfTimeElapsed(this);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private JPanel playersNamePanel;
+    private JLabel playerOneLabel;
+    private JLabel playerTwoLabel;
+    private JLabel playerThreeLabel;
+    private JLabel playerFourLabel;
+
+
+    public Playing getPlaying() {
+        return playing;
+    }
+
+    public JLabel getSecondsLabel() {
+        return secondsLabel;
+    }
+
+    public JLabel getMinutesLabel() {
+        return minutesLabel;
+    }
+
+    public JLabel getHoursLabel() {
+        return hoursLabel;
+    }
 
     public JPanel getDicePanel() {
         return dicePanel;
@@ -45,20 +79,19 @@ GamePhase gamePhase = new GamePhase();
         return defenderRollsB;
     }
 
-    public ImageIcon[] getDiceIcons() {
-        return diceIcons;
-    }
 
     public BoardView() {
 
         this.setExtendedState(MAXIMIZED_BOTH);
         this.setUndecorated(false);
         this.setLayout(null);
-
+        this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
         this.add(gameMap());
         this.add(showStageOfGamePanel());
         this.add(showNumberOfReadySoldiers());
         this.add(showDicePanel());
+        this.add(showElapsedTime());
+        this.add(getPlayersNamePanel());
         this.setVisible(true);
     }
 
@@ -174,6 +207,35 @@ GamePhase gamePhase = new GamePhase();
         return stageOfGamePanel;
     }
 
+    public JPanel showElapsedTime() {
+
+        timePanel = new JPanel();
+        timePanel.setBounds(1700, 50, 130, 50);
+        timePanel.setBackground(Color.GRAY);
+
+        FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER);
+
+        secondsLabel = new JLabel();
+        secondsLabel.setText("" + MTimeElapsed.getSecond());
+        secondsLabel.setFont(new Font("Algerian", Font.BOLD, 20));
+
+        minutesLabel = new JLabel();
+        minutesLabel.setText("" + MTimeElapsed.getMinutes());
+        minutesLabel.setFont(new Font("Algerian", Font.BOLD, 20));
+
+        hoursLabel = new JLabel();
+        hoursLabel.setText("" + MTimeElapsed.getHour());
+        hoursLabel.setFont(new Font("Algerian", Font.BOLD, 20));
+
+
+        timePanel.add(hoursLabel);
+        timePanel.add(minutesLabel);
+        timePanel.add(secondsLabel);
+
+        timePanel.setLayout(flowLayout);
+
+        return timePanel;
+    }
 
     public JPanel showNumberOfReadySoldiers() {
 
@@ -185,7 +247,6 @@ GamePhase gamePhase = new GamePhase();
         numberOfReadySoldiers = new JLabel();
         numberOfReadySoldiers.setBounds(30, 90, 140, 140);
         numberOfReadySoldiers.setText("ready soldiers:" + PlayersController.getCurrentPlayer().getSoldiers());
-        //System.out.println("number of soldiers set for label at int place");
         numberOfReadySoldiers.setFont(new Font("Algerian", Font.BOLD, 20));
 
         label = new JLabel();
@@ -193,37 +254,108 @@ GamePhase gamePhase = new GamePhase();
         currentPlayerIcon = new ImageIcon(iconAddress + ".jpg");
         label.setIcon(currentPlayerIcon);
 
-
         numberOfSoldiersPanel.add(label);
         numberOfSoldiersPanel.add(numberOfReadySoldiers);
 
         return numberOfSoldiersPanel;
     }
 
-   public JPanel showDicePanel() {
+    public JPanel getPlayersNamePanel() {
 
-         dicePanel = new JPanel();
-         dicePanel.setBounds(20,80,260,280);
-         dicePanel.setBackground(Color.BLACK);
-         dicePanel.setLayout(null);
+        ArrayList<Player> players = new ArrayList(PlayersController.getPlayerList());
+        int numberOfPlayers = PlayersController.getNumberOfPlayers();
 
-         attackerRollsB = new JButton[playing.getAttackerDice()];
-         defenderRollsB = new JButton[playing.getDefenderDice()];
+        playersNamePanel = new JPanel();
+        playersNamePanel.setBounds(1700, 250, 200, 210);
+        playersNamePanel.setBackground(Color.black);
 
-         for(int i=0;i<attackerRollsB.length;i++){
-             attackerRollsB[i] = new JButton("attacker");
-             attackerRollsB[i].setBounds(30,70*(i+1),83,60);
-             attackerRollsB[i].setActionCommand("attacker button");
-             attackerRollsB[i].addActionListener(new dicePanelController(this,playing));
-             dicePanel.add(attackerRollsB[i]);
-         }
-         for (int j=0;j<defenderRollsB.length;j++){
-             defenderRollsB[j] = new JButton("defender");
-             defenderRollsB[j].setBounds(140,70*(j+1),84,60);
-             defenderRollsB[j].setActionCommand("defender button");
-             dicePanel.add(defenderRollsB[j]);
-         }
-         return dicePanel;
+        playerOneLabel = new JLabel(players.get(0).getName());
+        playerOneLabel.setBounds(10, 0, 200, 40);
+        playerOneLabel.setFont(new Font("Algerian", Font.BOLD, 20));
+        playerOneLabel.setForeground(Color.WHITE);
+        playersNamePanel.add(playerOneLabel);
+
+        playerTwoLabel = new JLabel(players.get(1).getName());
+        playerTwoLabel.setFont(new Font("Algerian", Font.BOLD, 20));
+        playerTwoLabel.setForeground(Color.WHITE);
+        playerTwoLabel.setBounds(10, 60, 200, 20);
+        playersNamePanel.add(playerTwoLabel);
+
+        if (numberOfPlayers == 3 || numberOfPlayers == 4) {
+            playerThreeLabel = new JLabel(players.get(2).getName());
+            playerThreeLabel.setFont(new Font("Algerian", Font.BOLD, 20));
+            playerThreeLabel.setForeground(Color.WHITE);
+            playerThreeLabel.setBounds(10, 120, 200, 20);
+            playersNamePanel.add(playerThreeLabel);
+        }
+
+        if (numberOfPlayers == 4) {
+            playerFourLabel = new JLabel(players.get(3).getName());
+            playerFourLabel.setFont(new Font("Algerian", Font.BOLD, 20));
+            playerFourLabel.setForeground(Color.WHITE);
+            playerFourLabel.setBounds(10, 180, 200, 20);
+            playersNamePanel.add(playerFourLabel);
+        }
+
+        playersNamePanel.setLayout(null);
+        return playersNamePanel;
+    }
+
+    public void showCurrentPlayer() {
+
+        String name = PlayersController.getCurrentPlayer().getName();
+        Icon arrowIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\arrows.png");
+        if (name.equalsIgnoreCase(playerOneLabel.getText())) {
+            playerOneLabel.setIcon(arrowIcon);
+        }
+
+        if (name.equalsIgnoreCase(playerTwoLabel.getText())) {
+            playerTwoLabel.setIcon(arrowIcon);
+        }
+
+        try {
+            if (name.equalsIgnoreCase(playerThreeLabel.getText())) {
+                playerThreeLabel.setIcon(arrowIcon);
+            }
+
+            if (name.equalsIgnoreCase(playerFourLabel.getText())) {
+                playerFourLabel.setIcon(arrowIcon);
+            }
+        } catch (NullPointerException nullPointerException) {
+            nullPointerException.printStackTrace();
+        }
+
+    }
+
+    public JPanel showDicePanel() {
+
+        dicePanel = new JPanel();
+        dicePanel.setBounds(20, 80, 260, 280);
+        dicePanel.setBackground(Color.BLACK);
+        dicePanel.setLayout(null);
+
+        attackerRollsB = new JButton[playing.getAttackerDice()];
+        defenderRollsB = new JButton[playing.getDefenderDice()];
+
+        for (int i = 0; i < attackerRollsB.length; i++) {
+            attackerRollsB[i] = new JButton("attacker");
+            attackerRollsB[i].setBounds(30, 70 * (i + 1), 83, 60);
+            attackerRollsB[i].setActionCommand("attacker button");
+            attackerRollsB[i].addActionListener(new dicePanelController(this, playing));
+            attackerRollsB[i].setEnabled(false);
+            dicePanel.add(attackerRollsB[i]);
+        }
+        attackerRollsB[0].setEnabled(true);
+        for (int j = 0; j < defenderRollsB.length; j++) {
+            defenderRollsB[j] = new JButton("defender");
+            defenderRollsB[j].setBounds(140, 70 * (j + 1), 84, 60);
+            defenderRollsB[j].setActionCommand("defender button");
+            defenderRollsB[j].addActionListener(new dicePanelController(this, playing));
+            defenderRollsB[j].setEnabled(false);
+            dicePanel.add(defenderRollsB[j]);
+        }
+
+        return dicePanel;
     }
 
 
@@ -261,36 +393,52 @@ GamePhase gamePhase = new GamePhase();
 
         }
     }
-/*
-    public void showForeignNeighborsOfLand(int landId) {
-        //////////////////////////
-        //ArrayList<Integer> neighborsId = boardChecking.getForeignNeighbors(landId);
-        //////////////////////////
-        for (int i = 0; i < neighborsId.size(); i++) {
-            landButtonMap.get(neighborsId.get(i)).setBackground(Color.DARK_GRAY);
+
+    /*
+        public void showForeignNeighborsOfLand(int landId) {
+            //////////////////////////
+            //ArrayList<Integer> neighborsId = boardChecking.getForeignNeighbors(landId);
+            //////////////////////////
+            for (int i = 0; i < neighborsId.size(); i++) {
+                landButtonMap.get(neighborsId.get(i)).setBackground(Color.DARK_GRAY);
+            }
         }
-    }
-*/
-    public void showLandsWithFortifyAbility(){
+    */
+    public void showLandsWithFortifyAbility() {
         boardChecking.findLandsWithFortifyAbility();
         HashSet<Integer> landsWithFortifyAbility = boardChecking.getLandsWithFortifyAbility();
-        for(int i=0;i<Map.getMapLength();i++){
-            for(int j=0;j<Map.getMapWidth();j++){
-                if(landsWithFortifyAbility.contains(landButtons[i][j].getId())){
+        for (int i = 0; i < Map.getMapLength(); i++) {
+            for (int j = 0; j < Map.getMapWidth(); j++) {
+                if (landsWithFortifyAbility.contains(landButtons[i][j].getId())) {
                     landButtons[i][j].setBackground(Color.WHITE);
                 }
             }
         }
     }
 
-    public void showDestinations(int sourceId){
+    public void showDestinations(int sourceId) {
         boardChecking.findDestinations(sourceId);
         HashSet<Integer> destinationsId = boardChecking.getDestinationsID();
-        for(int destinationId : destinationsId){
+        for (int destinationId : destinationsId) {
             landButtonMap.get(destinationId).setBackground(Color.DARK_GRAY);
         }
     }
+
+    public void showRollResult() {
+
+        for (int i = 0; i < defenderRollsB.length; i++) {
+            if (playing.getDefenderRolls().get(i) >= playing.getAttackerRolls().get(i)) {
+                defenderRollsB[i].setBackground(Color.green);
+                attackerRollsB[i].setBackground(Color.RED);
+            } else {
+                defenderRollsB[i].setBackground(Color.RED);
+                attackerRollsB[i].setBackground(Color.green);
+            }
+        }
+    }
+
 }
+
 
 class LandButton extends JButton {
     private final int id;
@@ -305,4 +453,52 @@ class LandButton extends JButton {
 }
 
 
+class Suggestion extends JDialog {
+
+    private JButton doneButton;
+    private JSlider numOfSoldiers;
+    private JLabel showSlider;
+    private GameBoardChecking boardChecking;
+
+    public Suggestion() {
+
+        setBounds(800, 300, 500, 282);
+        setUndecorated(true);
+        setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\DbackG.jpg")));
+        setLayout(null);
+
+        doneButton = new JButton("done");
+        doneButton.setBounds(0, 235, 100, 40);
+        doneButton.setFont(new Font("Algerian", Font.BOLD, 20));
+        doneButton.setForeground(Color.BLACK);
+        doneButton.setBackground(Color.DARK_GRAY);
+
+        showSlider = new JLabel();
+        showSlider.setBounds(240, 50, 200, 60);
+        showSlider.setFont(new Font("Algerian", Font.BOLD, 50));
+        showSlider.setForeground(Color.WHITE);
+
+        numOfSoldiers = new JSlider(1, 10);//boardChecking.getMaxSoldierForFortify());
+        numOfSoldiers.setBounds(105, 110, 300, 50);
+        numOfSoldiers.setMajorTickSpacing(1);
+        numOfSoldiers.setFont(new Font("Algerian", Font.BOLD, 20));
+        numOfSoldiers.setBackground(Color.darkGray);
+        numOfSoldiers.setForeground(Color.BLACK);
+        numOfSoldiers.setPaintTicks(true);
+        numOfSoldiers.setPaintLabels(true);
+        numOfSoldiers.setPaintTrack(false);
+        numOfSoldiers.setBorder(new EtchedBorder());
+        numOfSoldiers.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                showSlider.setText("" + numOfSoldiers.getValue());
+            }
+        });
+
+        add(numOfSoldiers);
+        add(doneButton);
+        add(showSlider);
+        setVisible(true);
+    }
+}
 
