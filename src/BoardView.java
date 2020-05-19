@@ -438,6 +438,15 @@ public class BoardView extends JFrame {
         }
     }
 
+    public void updateGameMap(int landId){
+        LandButton targetButton = this.getLandButtonByID(landId);
+        targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
+    }
+
+    public void updateNumberOfReadySPanel(){
+        getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
+        getNumberOfReadySoldiers().setText("ready soldiers: " + PlayersController.getCurrentPlayer().getSoldiers());
+    }
 
 }
 

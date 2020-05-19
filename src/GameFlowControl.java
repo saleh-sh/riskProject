@@ -28,11 +28,16 @@ public class GameFlowControl {
                 gamePhase.setCanReinforce(true);
                 PlayersController.findCurrentPlayer();
                 boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
+                /*
                 boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
                 boardView.getNumberOfReadySoldiers().setText("ready soldiers: " + PlayersController.getCurrentPlayer().getSoldiers());
-
+*/
+                boardView.updateNumberOfReadySPanel();
             } else {
+                do {
                 PlayersController.findCurrentPlayer();
+
+                }while (PlayersController.getCurrentPlayer().getSoldiers()<=0);
                 boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
                 boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
                 System.out.println("soldiers count update in put the bead phase");

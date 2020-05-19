@@ -24,12 +24,18 @@ public class GameMapController implements ActionListener {
 
         int landId = Integer.parseInt(e.getActionCommand());
         if (gamePhase.isPutBeadPhase() || gamePhase.isCanReinforce()) {
+
             Player currentPlayer = PlayersController.getCurrentPlayer();
-if (currentPlayer.getConqueredLands().contains(landId) == true && currentPlayer.getSoldiers() > 0){
-            playing.putTheBead(landId);
-            LandButton targetButton = boardView.getLandButtonByID(landId);
-            targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
-            gameFlowControl.controlGameFLow();}
+
+            if (currentPlayer.getConqueredLands().contains(landId) == true && currentPlayer.getSoldiers() > 0) {
+                playing.putTheBead(landId);
+                /*
+                LandButton targetButton = boardView.getLandButtonByID(landId);
+                targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");*/
+                ///خط پایین جایگزین دو خط بالا است
+                boardView.updateGameMap(landId);
+                gameFlowControl.controlGameFLow();
+            }
 
         } else if (gamePhase.isCanAttack()) {
 
@@ -106,7 +112,7 @@ class dicePanelController implements ActionListener {
 
             if (index + 1 < boardView.getAttackerRollsB().length) {
                 boardView.getAttackerRollsB()[index + 1].setEnabled(true);
-            }else {
+            } else {
                 boardView.getDefenderRollsB()[0].setEnabled(true);
             }
 
