@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class RiskView extends JFrame {
 
@@ -54,7 +55,6 @@ public class RiskView extends JFrame {
 
 class PlayerCount extends JFrame {
 
-    //private JButton nextButton;
     private JButton backButton;
     private JButton twoPlayer;
     private JButton threePlayer;
@@ -127,7 +127,7 @@ class PlayerCount extends JFrame {
     }
 }
 
-class SettingPlayersName extends JFrame {
+class SettingPlayersName extends JFrame implements ActionListener {
 
     private int playerCount;
     private JTextField playerOneName;
@@ -137,7 +137,9 @@ class SettingPlayersName extends JFrame {
     private JButton nextButton;
     private JButton backButton;
 
-    private SettingPlayersNameController settingPlayersNameController;
+    private String[] playersName;
+
+    private Preparation preparation;
 
     public SettingPlayersName() {
 
@@ -153,18 +155,27 @@ class SettingPlayersName extends JFrame {
 
     public void setPlayersName() {
 
-        settingPlayersNameController = new SettingPlayersNameController(this);
+        playersName = new String[PlayersController.getNumberOfPlayers()];
+
         playerOneName = new JTextField("player one");
         playerOneName.setBounds(750, 400, 400, 80);
+        playerOneName.addActionListener(this);
+        playerOneName.setActionCommand("player one name");
         playerOneName.setFont(new Font("Algerian", Font.BOLD, 50));
         this.add(playerOneName);
+
         playerTwoName = new JTextField("player two");
         playerTwoName.setBounds(750, 500, 400, 80);
+        playerTwoName.addActionListener(this);
+        playerTwoName.setActionCommand("player two name");
         playerTwoName.setFont(new Font("Algerian", Font.BOLD, 50));
         this.add(playerTwoName);
+
         if (playerCount == 3 || playerCount == 4) {
             playerThreeName = new JTextField("player three");
             playerThreeName.setBounds(750, 600, 400, 80);
+            playerThreeName.addActionListener(this);
+            playerThreeName.setActionCommand("player three name");
             playerThreeName.setFont(new Font("Algerian", Font.BOLD, 50));
             this.add(playerThreeName);
         }
@@ -172,12 +183,15 @@ class SettingPlayersName extends JFrame {
         if (playerCount == 4) {
             playerFourName = new JTextField("player four");
             playerFourName.setBounds(750, 700, 400, 80);
+            playerFourName.addActionListener(this);
+            playerFourName.setActionCommand("player four name");
             playerFourName.setFont(new Font("Algerian", Font.BOLD, 50));
             this.add(playerFourName);
         }
 
         nextButton = new JButton("next");
         nextButton.setBounds(1700, 900, 114, 95);
+        nextButton.addActionListener(this);
         nextButton.setActionCommand("next button");
         Icon nextIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\next.png");
         nextButton.setIcon(nextIcon);
@@ -188,11 +202,37 @@ class SettingPlayersName extends JFrame {
         backButton.setActionCommand("back button");
         Icon backIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\back.png");
         backButton.setIcon(backIcon);
-        backButton.addActionListener(settingPlayersNameController);
+        backButton.addActionListener(this);
         this.add(backButton);
     }
 
-    public String[] getPlayersName(){
-        
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String actionCommand = e.getActionCommand();
+
+        if (actionCommand.equalsIgnoreCase("player one name")){
+            System.out.println("field 1");
+            playersName[0] = playerOneName.getText();
+        }
+        if (actionCommand.equalsIgnoreCase("player two name")){
+            System.out.println("field 2");
+            playersName[1] = playerTwoName.getText();
+        }
+        if (actionCommand.equalsIgnoreCase("player three name")){
+            System.out.println("field 3");
+            playersName[2] = playerThreeName.getText();
+        }
+        if (actionCommand.equalsIgnoreCase("player four name")){
+            System.out.println("field 4");
+            playersName[3] = playerFourName.getText();
+        }
+        if (actionCommand.equalsIgnoreCase("back button")){
+            this.dispose();
+        }
+        if (actionCommand.equalsIgnoreCase("next button")){
+            System.out.println("next");
+            preparation = new Preparation();
+            preparation.gameBoardPreparation(playersName);
+        }
     }
 }

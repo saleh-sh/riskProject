@@ -17,39 +17,21 @@ public class SetPlayerCountController implements ActionListener {
 
         if (actionCommand.equalsIgnoreCase("two player button")) {
             PlayersController.setNumberOfPlayers(2);
+            playersName = new SettingPlayersName();
         }
         if (actionCommand.equalsIgnoreCase("three player button")) {
             PlayersController.setNumberOfPlayers(3);
+            playersName = new SettingPlayersName();
         }
         if (actionCommand.equalsIgnoreCase("four player button")) {
             PlayersController.setNumberOfPlayers(4);
+            playersName = new SettingPlayersName();
         }
         if (actionCommand.equalsIgnoreCase("back button")) {
             playerCount.dispose();
         }
-        playersName = new SettingPlayersName();
+
     }
 }
 
-class SettingPlayersNameController implements ActionListener{
 
-    private SettingPlayersName playersName;
-
-    public SettingPlayersNameController(SettingPlayersName playersName) {
-        this.playersName = playersName;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        String actionCommand = e.getActionCommand();
-
-        if (actionCommand.equalsIgnoreCase("back button")){
-            playersName.dispose();
-        }
-        if (actionCommand.equalsIgnoreCase("next button")){
-
-            String[] names = new String[PlayersController.getNumberOfPlayers()];
-
-        }
-    }
-}

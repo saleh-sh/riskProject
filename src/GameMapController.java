@@ -24,11 +24,12 @@ public class GameMapController implements ActionListener {
 
         int landId = Integer.parseInt(e.getActionCommand());
         if (gamePhase.isPutBeadPhase() || gamePhase.isCanReinforce()) {
-
+            Player currentPlayer = PlayersController.getCurrentPlayer();
+if (currentPlayer.getConqueredLands().contains(landId) == true && currentPlayer.getSoldiers() > 0){
             playing.putTheBead(landId);
             LandButton targetButton = boardView.getLandButtonByID(landId);
             targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
-            gameFlowControl.controlGameFLow();
+            gameFlowControl.controlGameFLow();}
 
         } else if (gamePhase.isCanAttack()) {
 

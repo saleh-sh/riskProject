@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 
 public class Preparation {
 
@@ -7,7 +8,7 @@ public class Preparation {
     BoardView boardView;
 
     public void gameBoardPreparation(String[] playersName) {
-
+        System.out.println("prepration method");
         playersController = new PlayersController();
         playersController.createPlayers(playersName);
         Map.createLands();

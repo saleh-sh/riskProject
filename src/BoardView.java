@@ -4,6 +4,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -345,7 +346,7 @@ public class BoardView extends JFrame {
             attackerRollsB[i].setEnabled(false);
             dicePanel.add(attackerRollsB[i]);
         }
-        attackerRollsB[0].setEnabled(true);
+        // attackerRollsB[0].setEnabled(true);
         for (int j = 0; j < defenderRollsB.length; j++) {
             defenderRollsB[j] = new JButton("defender");
             defenderRollsB[j].setBounds(140, 70 * (j + 1), 84, 60);
@@ -436,6 +437,7 @@ public class BoardView extends JFrame {
             }
         }
     }
+
 
 }
 
