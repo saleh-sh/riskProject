@@ -63,12 +63,21 @@ public class Playing {
         return defenderLandId;
     }
 
-    public void setAttackerLandId(int attackerLandId) {
+    public void setAttackerLandId(Integer attackerLandId) {
         this.attackerLandId = attackerLandId;
     }
 
-    public void setDefenderLandId(int defenderLandId) {
+    public void setDefenderLandId(Integer defenderLandId) {
         this.defenderLandId = defenderLandId;
+    }
+
+
+    public void setAttackerDice(int attackerDice) {
+        this.attackerDice = attackerDice;
+    }
+
+    public void setDefenderDice(int defenderDice) {
+        this.defenderDice = defenderDice;
     }
 
     ////////////////////////////////////////////////////////
@@ -96,6 +105,7 @@ public class Playing {
 
     public void attack() {
 
+        boardChecking = new GameBoardChecking();
         if (boardChecking.getLandsWithAttackAbility().contains(attackerLandId)) {
             if (boardChecking.getForeignNeighbors(attackerLandId).contains(defenderLandId)) {
 
@@ -110,8 +120,11 @@ public class Playing {
                 Collections.reverse(attackerRolls);
                 Collections.sort(defenderRolls);
                 Collections.reverse(defenderRolls);
-
-                for (int i = 0; i < defenderDice; i++) {
+                System.out.println("defender dice" + defenderDice);
+                System.out.println("attacker dice" + attackerDice);
+                System.out.println("defender rolls" + defenderRolls);
+                System.out.println("attacker rolls" + attackerRolls);
+                for (int i = 0; i < defenderDice && i < attackerDice; i++) {
                     if (defenderRolls.get(i) >= attackerRolls.get(i)) {
                         attackerLosses++;
                     } else {
@@ -135,6 +148,8 @@ public class Playing {
                     defender.removeLand(defenderLandId);
                 }
 
+                finishTheAttack();
+
                 // Player defender = Map.getLandHashMap().get(defenderLandId).getConqueror();
             }
         }
@@ -150,6 +165,7 @@ public class Playing {
         destination.increaseSoldiers(1);
     }
 
+/*
     public void calcuteAttackerDice() {
 
         if (Map.getLandHashMap().get(attackerLandId).getNumberSoldiers() >= 4) {
@@ -166,6 +182,10 @@ public class Playing {
         } else {
             defenderDice = 1;
         }
-    }
+    }*/
 
+    public void finishTheAttack(){
+        this.attackerLandId = null;
+        this.defenderLandId = null;
+    }
 }

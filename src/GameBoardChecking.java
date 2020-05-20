@@ -4,7 +4,6 @@ import java.util.HashSet;
 public class GameBoardChecking {
 
     private Playing playing;
-    private ArrayList<Integer> landsWithAttackAbility;
     private ArrayList<Integer> landsWithForeignNeighbor;
     //////////////////////////////////////////////////
     private HashSet<Integer> landsWithFortifyAbility;
@@ -22,10 +21,6 @@ public class GameBoardChecking {
     //////////////////////////////////////////////////
     public ArrayList<Integer> getLandsWithForeignNeighbor() {
         return landsWithForeignNeighbor;
-    }
-
-    public ArrayList<Integer> getLandsWithAttackAbility() {
-        return landsWithAttackAbility;
     }
 
     public void updateNumOfSoldiersReceived(Player currentPlayer) {
@@ -92,9 +87,11 @@ public class GameBoardChecking {
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public void canAttack(Player currentPlayer) {
+    public ArrayList<Integer> getLandsWithAttackAbility() {
 
-        landsWithAttackAbility = new ArrayList<>();
+        Player currentPlayer = PlayersController.getCurrentPlayer();
+        ArrayList<Integer> landsWithAttackAbility = new ArrayList<>();
+
         for (int i = 0; i < currentPlayer.getConqueredLands().size(); i++) {
             int landIdInIndexI = currentPlayer.getConqueredLands().get(i);
             if (Map.getLandHashMap().get(landIdInIndexI).getNumberSoldiers() > 1) {
@@ -107,6 +104,7 @@ public class GameBoardChecking {
                 }
             }
         }
+        return landsWithAttackAbility;
     }
 
 
@@ -176,6 +174,24 @@ public class GameBoardChecking {
 
         int numOfSoldiersInSource = Map.getLandHashMap().get(playing.getSourceId()).getNumberSoldiers();
         return numOfSoldiersInSource - 1;
+    }
+
+    public void calcuteAttackerDice() {
+
+        if (Map.getLandHashMap().get(playing.getAttackerLandId()).getNumberSoldiers() >= 4) {
+            playing.setAttackerDice(3);
+        } else {
+            playing.setAttackerDice( Map.getLandHashMap().get(playing.getAttackerLandId()).getNumberSoldiers() - 1);
+        }
+    }
+
+    public void calcuteDefenderDice() {
+
+        if (Map.getLandHashMap().get(playing.getDefenderLandId()).getNumberSoldiers() >= 2) {
+            playing.setDefenderDice(2);
+        } else {
+            playing.setDefenderDice(1);
+        }
     }
 
 }

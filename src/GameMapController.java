@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GameMapController implements ActionListener {
@@ -23,6 +22,7 @@ public class GameMapController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         int landId = Integer.parseInt(e.getActionCommand());
+
         if (gamePhase.isPutBeadPhase() || gamePhase.isCanReinforce()) {
 
             Player currentPlayer = PlayersController.getCurrentPlayer();
@@ -41,13 +41,20 @@ public class GameMapController implements ActionListener {
 
             if (playing.getAttackerLandId() == null) {
                 playing.setAttackerLandId(landId);
-                boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
-                //boardView.showForeignNeighborsOfLand(landId);
+                //boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
+                //خط پایین جایگزین خط بالا است
+                boardView.showAttackerLand(landId);
+                boardView.returnPreviousState();
+                boardView.showForeignNeighborsOfLand(landId);
             } else {
                 playing.setDefenderLandId(landId);
-                boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
-                //boardView.returnPreviousState();
+                //boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
+                //خط پایین جایگزین خط بالا شد
+                boardView.showDefenderLand(landId);
+                boardView.returnPreviousState();
                 playing.attack();
+                boardView.showAttackerDicePanel();
+
             }
         } else if (gamePhase.isCanFortify()) {
             if (playing.getSourceId() == null) {

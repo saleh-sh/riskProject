@@ -35,25 +35,30 @@ public class GameFlowControl {
                 boardView.updateNumberOfReadySPanel();
             } else {
                 do {
-                PlayersController.findCurrentPlayer();
-
-                }while (PlayersController.getCurrentPlayer().getSoldiers()<=0);
+                    PlayersController.findCurrentPlayer();
+                } while (PlayersController.getCurrentPlayer().getSoldiers() <= 0);
+                /*
                 boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
-                boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
+                boardView.getNumberOfReadySoldiers().setText("ready soldiers:" + PlayersController.getCurrentPlayer().getSoldiers());
+                */
+                //خط پایین جایگزین دو خط بالا شد
+                boardView.updateNumberOfReadySPanel();
                 System.out.println("soldiers count update in put the bead phase");
             }
         } else if (gamePhase.isCanReinforce()) {
             if (PlayersController.getCurrentPlayer().getSoldiers() != 0) {
+                /*
                 boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
-                boardView.getNumberOfReadySoldiers().setText("ready soldiers" + PlayersController.getCurrentPlayer().getSoldiers());
+                boardView.getNumberOfReadySoldiers().setText("ready soldiers:" + PlayersController.getCurrentPlayer().getSoldiers());
+                */
+                boardView.updateNumberOfReadySPanel();
                 System.out.println("soldiers count update in rein force phase");
             } else {
                 gamePhase.setCanReinforce(false);
                 System.out.println("reinforce false");
 
-
                 gamePhase.setCanAttack(true);
-                //boardView.showLandsWithAttackAbility();
+                boardView.showLandsWithAttackAbility();
                 boardView.getNumberOfSoldiersPanel().setVisible(false);
             }
         } else if (gamePhase.isCanAttack()) {
@@ -61,5 +66,6 @@ public class GameFlowControl {
         }
 
     }
+
 
 }

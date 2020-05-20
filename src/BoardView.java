@@ -4,17 +4,21 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class BoardView extends JFrame {
-    Playing playing = new Playing();
-    GamePhase gamePhase = new GamePhase();
-    GameMapController gameMapController = new GameMapController(playing, this, gamePhase);
+    private Playing playing = new Playing();
+    private GamePhase gamePhase = new GamePhase();
     private GameBoardChecking boardChecking = new GameBoardChecking();
 
+
+    GameMapController gameMapController = new GameMapController(playing, this, gamePhase);
+
+
     private LandButton[][] landButtons;
+
+
     private HashMap<Integer, LandButton> landButtonMap;
 
     private JPanel gameMap;
@@ -32,7 +36,8 @@ public class BoardView extends JFrame {
     private JLabel label;
     private ImageIcon currentPlayerIcon;
     /////////////////////////////////////////////////
-    private JPanel dicePanel;
+    private JPanel attackerDicePanel;
+    private JPanel defenderDicePanel;
     private JButton[] attackerRollsB;
     private JButton[] defenderRollsB;
     /////////////////////////////////////////////////
@@ -51,6 +56,9 @@ public class BoardView extends JFrame {
     private JLabel playerThreeLabel;
     private JLabel playerFourLabel;
 
+    private boolean attackerShown = false;
+    private boolean defenderShown = false;
+
 
     public Playing getPlaying() {
         return playing;
@@ -68,8 +76,8 @@ public class BoardView extends JFrame {
         return hoursLabel;
     }
 
-    public JPanel getDicePanel() {
-        return dicePanel;
+    public JPanel getAttackerDicePanel() {
+        return attackerDicePanel;
     }
 
     public JButton[] getAttackerRollsB() {
@@ -90,11 +98,12 @@ public class BoardView extends JFrame {
         this.add(gameMap());
         this.add(showStageOfGamePanel());
         this.add(showNumberOfReadySoldiers());
-        this.add(showDicePanel());
+        //this.add(showDicePanel());
         this.add(showElapsedTime());
         this.add(getPlayersNamePanel());
         this.setVisible(true);
     }
+
 
     ////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public JLabel getNumberOfReadySoldiers() {
@@ -160,9 +169,13 @@ public class BoardView extends JFrame {
             for (int j = 0; j < Map.getMapWidth(); j++) {
                 if (Map.getLands()[i][j] != null) {
                     String icon = Map.getLandByCoordinates(i, j).getConqueror().getIcon();
+                    System.out.println(icon);
                     String text = "" + Map.getLandByCoordinates(i, j).getNumberSoldiers();
+                    System.out.println(text);
                     ImageIcon imageIcon = new ImageIcon(icon + ".jpg");
+                    System.out.println(imageIcon);
                     landButtons[i][j].setIcon(imageIcon);
+                    System.out.println(landButtons[i][j]);
                     landButtons[i][j].setText(text);
                     landButtons[i][j].setFont(new Font("Algerian", Font.BOLD, 20));
                 }
@@ -328,12 +341,37 @@ public class BoardView extends JFrame {
 
     }
 
-    public JPanel showDicePanel() {
+    public void showAttackerDicePanel() {
 
-        dicePanel = new JPanel();
-        dicePanel.setBounds(20, 80, 260, 280);
-        dicePanel.setBackground(Color.BLACK);
-        dicePanel.setLayout(null);
+        attackerDicePanel = new JPanel();
+        attackerDicePanel.setBounds(20, 80, 150, 280);
+        attackerDicePanel.setBackground(Color.DARK_GRAY);
+        GridLayout gridLayout = new GridLayout(3,1);
+
+        JButton attackerRollB1 = new JButton("attacker");
+        attackerRollB1.setActionCommand("attacker button");
+        attackerRollB1.setEnabled(false);
+        attackerDicePanel.add(attackerRollB1);
+
+        if (playing.getAttackerDice() == 2 || playing.getAttackerDice() == 3) {
+            JButton attackerRollB2 = new JButton("attacker");
+            attackerRollB2.setActionCommand("attacker button");
+            attackerRollB2.setEnabled(false);
+            attackerDicePanel.add(attackerRollB2);
+        }
+
+        if (playing.getAttackerDice() == 3) {
+            JButton attackerRollB3 = new JButton("attacker");
+            attackerRollB3.setActionCommand("attacker button");
+            attackerRollB3.setEnabled(false);
+            attackerDicePanel.add(attackerRollB3);
+        }
+
+        attackerDicePanel.setLayout(gridLayout);
+        this.add(attackerDicePanel);
+
+        /*
+
 
         attackerRollsB = new JButton[playing.getAttackerDice()];
         defenderRollsB = new JButton[playing.getDefenderDice()];
@@ -345,8 +383,10 @@ public class BoardView extends JFrame {
             attackerRollsB[i].addActionListener(new dicePanelController(this, playing));
             attackerRollsB[i].setEnabled(false);
             dicePanel.add(attackerRollsB[i]);
+
         }
-        // attackerRollsB[0].setEnabled(true);
+        attackerRollsB[0].setEnabled(true);
+
         for (int j = 0; j < defenderRollsB.length; j++) {
             defenderRollsB[j] = new JButton("defender");
             defenderRollsB[j].setBounds(140, 70 * (j + 1), 84, 60);
@@ -356,14 +396,38 @@ public class BoardView extends JFrame {
             dicePanel.add(defenderRollsB[j]);
         }
 
-        return dicePanel;
+        this.add(dicePanel);
+        //return dicePanel;*/
+    }
+
+
+    public void showDefenderDicePanel(){
+        defenderDicePanel = new JPanel();
+        defenderDicePanel.setBounds(170, 80, 150, 280);
+        defenderDicePanel.setBackground(Color.DARK_GRAY);
+        GridLayout gridLayout = new GridLayout(3,1);
+
+        JButton defenderRollB1 = new JButton("defender");
+        defenderRollB1.setActionCommand("defender button");
+        defenderRollB1.setEnabled(false);
+        defenderDicePanel.add(defenderRollB1);
+
+        if (playing.getDefenderDice() == 2){
+            JButton defenderRollB2 = new JButton("defender");
+            defenderRollB2.setActionCommand("defender button");
+            defenderRollB2.setEnabled(false);
+            defenderDicePanel.add(defenderRollB2);
+
+            defenderDicePanel.setLayout(gridLayout);
+            this.add(defenderDicePanel);
+        }
+
     }
 
 
     public void showLandsWithAttackAbility() {
 
-        //boardChecking = new GameBoardChecking();
-        //boardChecking.canAttack(PlayersController.getCurrentPlayer());
+        boardChecking = new GameBoardChecking();
         ArrayList<Integer> landsWithAttackAbility = boardChecking.getLandsWithAttackAbility();
         for (int i = 0; i < Map.getMapLength(); i++) {
             for (int j = 0; j < Map.getMapWidth(); j++) {
@@ -395,16 +459,16 @@ public class BoardView extends JFrame {
         }
     }
 
-    /*
-        public void showForeignNeighborsOfLand(int landId) {
-            //////////////////////////
-            //ArrayList<Integer> neighborsId = boardChecking.getForeignNeighbors(landId);
-            //////////////////////////
-            for (int i = 0; i < neighborsId.size(); i++) {
-                landButtonMap.get(neighborsId.get(i)).setBackground(Color.DARK_GRAY);
-            }
+
+    public void showForeignNeighborsOfLand(int landId) {
+        //////////////////////////
+        ArrayList<Integer> neighborsId = boardChecking.getForeignNeighbors(landId);
+        //////////////////////////
+        for (int i = 0; i < neighborsId.size(); i++) {
+            landButtonMap.get(neighborsId.get(i)).setBackground(Color.DARK_GRAY);
         }
-    */
+    }
+
     public void showLandsWithFortifyAbility() {
         boardChecking.findLandsWithFortifyAbility();
         HashSet<Integer> landsWithFortifyAbility = boardChecking.getLandsWithFortifyAbility();
@@ -427,7 +491,7 @@ public class BoardView extends JFrame {
 
     public void showRollResult() {
 
-        for (int i = 0; i < defenderRollsB.length; i++) {
+        for (int i = 0; i < defenderRollsB.length && i < attackerRollsB.length; i++) {
             if (playing.getDefenderRolls().get(i) >= playing.getAttackerRolls().get(i)) {
                 defenderRollsB[i].setBackground(Color.green);
                 attackerRollsB[i].setBackground(Color.RED);
@@ -438,15 +502,31 @@ public class BoardView extends JFrame {
         }
     }
 
-    public void updateGameMap(int landId){
+    public void updateGameMap(int landId) {
         LandButton targetButton = this.getLandButtonByID(landId);
         targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
     }
 
-    public void updateNumberOfReadySPanel(){
+    public void updateNumberOfReadySPanel() {
         getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
         getNumberOfReadySoldiers().setText("ready soldiers: " + PlayersController.getCurrentPlayer().getSoldiers());
     }
+
+    public void showAttackerLand(int landId) {
+        if (attackerShown == false) {
+            getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
+            attackerShown = true;
+        }
+
+    }
+
+    public void showDefenderLand(int landId) {
+        if (defenderShown == false) {
+            getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
+            defenderShown = true;
+        }
+    }
+
 
 }
 

@@ -15,6 +15,7 @@ public class Preparation {
         Map.setSeas();
         PlayersController.findCurrentPlayer();
         divideLands();
+
         boardView = new BoardView();
         boardView.showTheDivisionOfSoldiers();
         boardView.showCurrentPlayer();

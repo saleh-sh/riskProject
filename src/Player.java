@@ -42,7 +42,8 @@ public class Player {
     }
 
     public void removeLand(int landId) {
-        this.conqueredLands.remove(landId);
+       int index = conqueredLands.indexOf(landId);
+        this.conqueredLands.remove(index);
     }
 
     public ArrayList<Integer> getConqueredLands() {
