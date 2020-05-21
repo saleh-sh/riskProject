@@ -5,12 +5,13 @@ public class GameFlowControl {
     private GamePhase gamePhase;
     private BoardView boardView;
     private Playing playing;
-    private GameBoardChecking boardChecking = new GameBoardChecking();
+    private GameBoardChecking boardChecking;
 
     public GameFlowControl(GamePhase gamePhase, BoardView boardView, Playing playing) {
         this.gamePhase = gamePhase;
         this.boardView = boardView;
         this.playing = playing;
+        boardChecking = new GameBoardChecking(playing);
     }
 
     public void controlGameFLow() {
@@ -43,7 +44,6 @@ public class GameFlowControl {
                 */
                 //خط پایین جایگزین دو خط بالا شد
                 boardView.updateNumberOfReadySPanel();
-                System.out.println("soldiers count update in put the bead phase");
             }
         } else if (gamePhase.isCanReinforce()) {
             if (PlayersController.getCurrentPlayer().getSoldiers() != 0) {
@@ -52,14 +52,14 @@ public class GameFlowControl {
                 boardView.getNumberOfReadySoldiers().setText("ready soldiers:" + PlayersController.getCurrentPlayer().getSoldiers());
                 */
                 boardView.updateNumberOfReadySPanel();
-                System.out.println("soldiers count update in rein force phase");
+
             } else {
                 gamePhase.setCanReinforce(false);
-                System.out.println("reinforce false");
+                boardView.getNumberOfSoldiersPanel().setVisible(false);
+
 
                 gamePhase.setCanAttack(true);
                 boardView.showLandsWithAttackAbility();
-                boardView.getNumberOfSoldiersPanel().setVisible(false);
             }
         } else if (gamePhase.isCanAttack()) {
 

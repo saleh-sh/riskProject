@@ -9,6 +9,9 @@ public class GameBoardChecking {
     private HashSet<Integer> landsWithFortifyAbility;
     private HashSet<Integer> destinationsID;
 
+    public GameBoardChecking(Playing playing) {
+        this.playing = playing;
+    }
 
     public HashSet<Integer> getDestinationsID() {
         return destinationsID;

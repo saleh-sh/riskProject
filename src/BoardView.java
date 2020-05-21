@@ -1,16 +1,18 @@
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.*;
 
 public class BoardView extends JFrame {
     private Playing playing = new Playing();
     private GamePhase gamePhase = new GamePhase();
-    private GameBoardChecking boardChecking = new GameBoardChecking();
+    private GameBoardChecking boardChecking = new GameBoardChecking(playing);
 
 
     GameMapController gameMapController = new GameMapController(playing, this, gamePhase);
@@ -38,8 +40,11 @@ public class BoardView extends JFrame {
     /////////////////////////////////////////////////
     private JPanel attackerDicePanel;
     private JPanel defenderDicePanel;
-    private JButton[] attackerRollsB;
-    private JButton[] defenderRollsB;
+    JButton attackerRollB1;
+    JButton attackerRollB2;
+    JButton attackerRollB3;
+    JButton defenderRollB1;
+    JButton defenderRollB2;
     /////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private JPanel timePanel;
@@ -60,6 +65,26 @@ public class BoardView extends JFrame {
     private boolean defenderShown = false;
 
 
+    public JButton getAttackerRollB1() {
+        return attackerRollB1;
+    }
+
+    public JButton getAttackerRollB2() {
+        return attackerRollB2;
+    }
+
+    public JButton getAttackerRollB3() {
+        return attackerRollB3;
+    }
+
+    public JButton getDefenderRollB1() {
+        return defenderRollB1;
+    }
+
+    public JButton getDefenderRollB2() {
+        return defenderRollB2;
+    }
+
     public Playing getPlaying() {
         return playing;
     }
@@ -78,14 +103,6 @@ public class BoardView extends JFrame {
 
     public JPanel getAttackerDicePanel() {
         return attackerDicePanel;
-    }
-
-    public JButton[] getAttackerRollsB() {
-        return attackerRollsB;
-    }
-
-    public JButton[] getDefenderRollsB() {
-        return defenderRollsB;
     }
 
 
@@ -153,6 +170,7 @@ public class BoardView extends JFrame {
                     landButtons[i][j].setBackground(Color.RED);
                 } else {
                     landButtons[i][j].setBackground(Color.BLUE);
+                    landButtons[i][j].setBorder(null);
                     landButtons[i][j].setEnabled(false);
                 }
                 gameMap.add(landButtons[i][j]);
@@ -169,13 +187,9 @@ public class BoardView extends JFrame {
             for (int j = 0; j < Map.getMapWidth(); j++) {
                 if (Map.getLands()[i][j] != null) {
                     String icon = Map.getLandByCoordinates(i, j).getConqueror().getIcon();
-                    System.out.println(icon);
                     String text = "" + Map.getLandByCoordinates(i, j).getNumberSoldiers();
-                    System.out.println(text);
                     ImageIcon imageIcon = new ImageIcon(icon + ".jpg");
-                    System.out.println(imageIcon);
                     landButtons[i][j].setIcon(imageIcon);
-                    System.out.println(landButtons[i][j]);
                     landButtons[i][j].setText(text);
                     landButtons[i][j].setFont(new Font("Algerian", Font.BOLD, 20));
                 }
@@ -344,90 +358,101 @@ public class BoardView extends JFrame {
     public void showAttackerDicePanel() {
 
         attackerDicePanel = new JPanel();
-        attackerDicePanel.setBounds(20, 80, 150, 280);
+        attackerDicePanel.setBounds(10, 80, 150, 200);
         attackerDicePanel.setBackground(Color.DARK_GRAY);
-        GridLayout gridLayout = new GridLayout(3,1);
+        GridLayout gridLayout = new GridLayout(3, 1);
 
-        JButton attackerRollB1 = new JButton("attacker");
-        attackerRollB1.setActionCommand("attacker button");
-        attackerRollB1.setEnabled(false);
+        attackerRollB1 = new JButton("attacker");
+        attackerRollB1.setActionCommand("attacker button1");
+        attackerRollB1.addActionListener(new dicePanelController(this, playing));
         attackerDicePanel.add(attackerRollB1);
 
         if (playing.getAttackerDice() == 2 || playing.getAttackerDice() == 3) {
-            JButton attackerRollB2 = new JButton("attacker");
-            attackerRollB2.setActionCommand("attacker button");
-            attackerRollB2.setEnabled(false);
+            attackerRollB2 = new JButton("attacker");
+            attackerRollB2.setActionCommand("attacker button2");
+            attackerRollB2.addActionListener(new dicePanelController(this, playing));
             attackerDicePanel.add(attackerRollB2);
         }
 
         if (playing.getAttackerDice() == 3) {
-            JButton attackerRollB3 = new JButton("attacker");
-            attackerRollB3.setActionCommand("attacker button");
-            attackerRollB3.setEnabled(false);
+            attackerRollB3 = new JButton("attacker");
+            attackerRollB3.setActionCommand("attacker button3");
+            attackerRollB3.addActionListener(new dicePanelController(this, playing));
             attackerDicePanel.add(attackerRollB3);
         }
 
         attackerDicePanel.setLayout(gridLayout);
         this.add(attackerDicePanel);
-
-        /*
-
-
-        attackerRollsB = new JButton[playing.getAttackerDice()];
-        defenderRollsB = new JButton[playing.getDefenderDice()];
-
-        for (int i = 0; i < attackerRollsB.length; i++) {
-            attackerRollsB[i] = new JButton("attacker");
-            attackerRollsB[i].setBounds(30, 70 * (i + 1), 83, 60);
-            attackerRollsB[i].setActionCommand("attacker button");
-            attackerRollsB[i].addActionListener(new dicePanelController(this, playing));
-            attackerRollsB[i].setEnabled(false);
-            dicePanel.add(attackerRollsB[i]);
-
-        }
-        attackerRollsB[0].setEnabled(true);
-
-        for (int j = 0; j < defenderRollsB.length; j++) {
-            defenderRollsB[j] = new JButton("defender");
-            defenderRollsB[j].setBounds(140, 70 * (j + 1), 84, 60);
-            defenderRollsB[j].setActionCommand("defender button");
-            defenderRollsB[j].addActionListener(new dicePanelController(this, playing));
-            defenderRollsB[j].setEnabled(false);
-            dicePanel.add(defenderRollsB[j]);
-        }
-
-        this.add(dicePanel);
-        //return dicePanel;*/
     }
 
 
-    public void showDefenderDicePanel(){
-        defenderDicePanel = new JPanel();
-        defenderDicePanel.setBounds(170, 80, 150, 280);
-        defenderDicePanel.setBackground(Color.DARK_GRAY);
-        GridLayout gridLayout = new GridLayout(3,1);
+    public void showDefenderDicePanel() {
 
-        JButton defenderRollB1 = new JButton("defender");
-        defenderRollB1.setActionCommand("defender button");
-        defenderRollB1.setEnabled(false);
+        defenderDicePanel = new JPanel();
+        defenderDicePanel.setBounds(180, 80, 150, 180);
+        defenderDicePanel.setBackground(Color.DARK_GRAY);
+        GridLayout gridLayout = new GridLayout(2, 1);
+
+        defenderRollB1 = new JButton("defender");
+        defenderRollB1.setActionCommand("defender button1");
+        defenderRollB1.addActionListener(new dicePanelController(this, playing));
         defenderDicePanel.add(defenderRollB1);
 
-        if (playing.getDefenderDice() == 2){
-            JButton defenderRollB2 = new JButton("defender");
-            defenderRollB2.setActionCommand("defender button");
-            defenderRollB2.setEnabled(false);
+        if (playing.getDefenderDice() == 2) {
+            defenderRollB2 = new JButton("defender");
+            defenderRollB2.setActionCommand("defender button2");
+            defenderRollB2.addActionListener(new dicePanelController(this, playing));
             defenderDicePanel.add(defenderRollB2);
-
-            defenderDicePanel.setLayout(gridLayout);
-            this.add(defenderDicePanel);
         }
 
+        defenderDicePanel.setLayout(gridLayout);
+        this.add(defenderDicePanel);
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public void showRollsResult() {
 
+        JPanel attackerRollsPanel = new JPanel();
+        attackerRollsPanel.setBounds(20, 500, 150, 280);
+        attackerRollsPanel.setBackground(Color.RED);
+        GridLayout gridLayout = new GridLayout(3, 1);
+
+        JPanel defenderRollsPanel = new JPanel();
+        defenderRollsPanel.setBounds(180, 500, 150, 190);
+        defenderRollsPanel.setBackground(Color.ORANGE);
+        GridLayout gridLayout1 = new GridLayout(2, 1);
+
+
+        JLabel[] AResultRolls = new JLabel[playing.getAttackerDice()];
+        JLabel[] DResultRolls = new JLabel[playing.getDefenderDice()];
+        ArrayList<Integer> attackerRolls = playing.getAttackerRolls();
+        ArrayList<Integer> defenderRolls = playing.getDefenderRolls();
+
+        for (int i = 0; i < attackerRolls.size() && i < defenderRolls.size(); i++) {
+            AResultRolls[i] = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + attackerRolls.get(i) + ".jpg"));
+            DResultRolls[i] = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + defenderRolls.get(i) + ".jpg"));
+            if (attackerRolls.get(i) <= defenderRolls.get(i)) {
+                AResultRolls[i].setBackground(Color.RED);
+                DResultRolls[i].setBackground(Color.green);
+            } else {
+                AResultRolls[i].setBackground(Color.green);
+                DResultRolls[i].setBackground(Color.RED);
+            }
+
+            attackerRollsPanel.add(AResultRolls[i]);
+            defenderRollsPanel.add(DResultRolls[i]);
+        }
+
+        attackerRollsPanel.setLayout(gridLayout);
+        defenderRollsPanel.setLayout(gridLayout1);
+        this.add(attackerRollsPanel);
+        this.add(defenderRollsPanel);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void showLandsWithAttackAbility() {
 
-        boardChecking = new GameBoardChecking();
+        boardChecking = new GameBoardChecking(playing);
         ArrayList<Integer> landsWithAttackAbility = boardChecking.getLandsWithAttackAbility();
         for (int i = 0; i < Map.getMapLength(); i++) {
             for (int j = 0; j < Map.getMapWidth(); j++) {
@@ -489,18 +514,6 @@ public class BoardView extends JFrame {
         }
     }
 
-    public void showRollResult() {
-
-        for (int i = 0; i < defenderRollsB.length && i < attackerRollsB.length; i++) {
-            if (playing.getDefenderRolls().get(i) >= playing.getAttackerRolls().get(i)) {
-                defenderRollsB[i].setBackground(Color.green);
-                attackerRollsB[i].setBackground(Color.RED);
-            } else {
-                defenderRollsB[i].setBackground(Color.RED);
-                attackerRollsB[i].setBackground(Color.green);
-            }
-        }
-    }
 
     public void updateGameMap(int landId) {
         LandButton targetButton = this.getLandButtonByID(landId);
@@ -513,18 +526,23 @@ public class BoardView extends JFrame {
     }
 
     public void showAttackerLand(int landId) {
-        if (attackerShown == false) {
-            getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
-            attackerShown = true;
-        }
-
+        getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
     }
 
     public void showDefenderLand(int landId) {
-        if (defenderShown == false) {
-            getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
-            defenderShown = true;
-        }
+        getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
+    }
+
+    public void dicePanelsVisibility(boolean state) {
+        attackerDicePanel.setVisible(state);
+        defenderDicePanel.setVisible(state);
+
+    }
+
+    public void updateLandsAfterAttack(int landId) {
+        landButtonMap.get(landId).setBorder(new CompoundBorder());
+        landButtonMap.get(landId).setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
+        landButtonMap.get(landId).setIcon(new ImageIcon(Map.getLandHashMap().get(landId).getConqueror().getIcon() + ".jpg"));
     }
 
 
@@ -550,8 +568,11 @@ class Suggestion extends JDialog {
     private JSlider numOfSoldiers;
     private JLabel showSlider;
     private GameBoardChecking boardChecking;
+    private Playing playing;
 
-    public Suggestion() {
+    public Suggestion(Playing playing) {
+        this.playing = playing;
+        boardChecking = new GameBoardChecking(playing);
 
         setBounds(800, 300, 500, 282);
         setUndecorated(true);
@@ -563,13 +584,19 @@ class Suggestion extends JDialog {
         doneButton.setFont(new Font("Algerian", Font.BOLD, 20));
         doneButton.setForeground(Color.BLACK);
         doneButton.setBackground(Color.DARK_GRAY);
+        doneButton.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Suggestion.this.playing.setNumberOfSoldiersSent(numOfSoldiers.getValue());
+            }
+        });
 
         showSlider = new JLabel();
         showSlider.setBounds(240, 50, 200, 60);
         showSlider.setFont(new Font("Algerian", Font.BOLD, 50));
         showSlider.setForeground(Color.WHITE);
 
-        numOfSoldiers = new JSlider(1, 10);//boardChecking.getMaxSoldierForFortify());
+        numOfSoldiers = new JSlider(1, boardChecking.getMaxSoldierForFortify());
         numOfSoldiers.setBounds(105, 110, 300, 50);
         numOfSoldiers.setMajorTickSpacing(1);
         numOfSoldiers.setFont(new Font("Algerian", Font.BOLD, 20));
@@ -590,6 +617,131 @@ class Suggestion extends JDialog {
         add(doneButton);
         add(showSlider);
         setVisible(true);
+    }
+}
+
+class ShowDice extends JDialog implements ActionListener {
+    private JPanel attackerDicePanel;
+    private JPanel defenderDicePanel;
+    JButton attackerRollB1;
+    JButton attackerRollB2;
+    JButton attackerRollB3;
+    JButton defenderRollB1;
+    JButton defenderRollB2;
+
+    Playing playing;
+    BoardView boardView;
+    JButton done;
+
+    public ShowDice(Playing playing, BoardView boardView) {
+        this.playing = playing;
+        this.boardView = boardView;
+
+        this.setBounds(30, 150, 300, 280);
+        setUndecorated(true);
+        this.setLayout(null);
+        this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\DbackG.jpg")));
+        this.addDoneButton();
+        this.showAttackerDicePanel();
+        this.showDefenderDicePanel();
+        this.setVisible(true);
+    }
+
+    public void addDoneButton() {
+
+        done = new JButton("done");
+        done.setBounds(180, 225, 100, 50);
+        done.setFont(new Font("Algerian", Font.BOLD, 20));
+        done.addActionListener(this);
+        done.setActionCommand("done button");
+        this.add(done);
+    }
+
+    public void showAttackerDicePanel() {
+
+        attackerDicePanel = new JPanel();
+        attackerDicePanel.setBounds(10, 20, 90, 200);
+        attackerDicePanel.setBackground(Color.DARK_GRAY);
+        GridLayout gridLayout = new GridLayout(3, 1);
+
+        attackerRollB1 = new JButton("attacker");
+        attackerRollB1.setActionCommand("attacker button1");
+        attackerRollB1.addActionListener(this);
+        attackerDicePanel.add(attackerRollB1);
+
+        if (playing.getAttackerDice() == 2 || playing.getAttackerDice() == 3) {
+            attackerRollB2 = new JButton("attacker");
+            attackerRollB2.setActionCommand("attacker button2");
+            attackerRollB2.addActionListener(this);
+            attackerDicePanel.add(attackerRollB2);
+        }
+
+        if (playing.getAttackerDice() == 3) {
+            attackerRollB3 = new JButton("attacker");
+            attackerRollB3.setActionCommand("attacker button3");
+            attackerRollB3.addActionListener(this);
+            attackerDicePanel.add(attackerRollB3);
+        }
+
+        attackerDicePanel.setLayout(gridLayout);
+        this.add(attackerDicePanel);
+    }
+
+
+    public void showDefenderDicePanel() {
+
+        defenderDicePanel = new JPanel();
+        defenderDicePanel.setBounds(150, 20, 90, 160);
+        defenderDicePanel.setBackground(Color.DARK_GRAY);
+        GridLayout gridLayout = new GridLayout(2, 1);
+
+        defenderRollB1 = new JButton("defender");
+        defenderRollB1.setActionCommand("defender button1");
+        defenderRollB1.addActionListener(this);
+        defenderDicePanel.add(defenderRollB1);
+
+        if (playing.getDefenderDice() == 2) {
+            defenderRollB2 = new JButton("defender");
+            defenderRollB2.setActionCommand("defender button2");
+            defenderRollB2.addActionListener(this);
+            defenderDicePanel.add(defenderRollB2);
+        }
+
+        defenderDicePanel.setLayout(gridLayout);
+        this.add(defenderDicePanel);
+    }
+
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        String actionCommand = e.getActionCommand();
+
+        if (actionCommand.equalsIgnoreCase("attacker button1")) {
+            this.attackerRollB1.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(0) + ".jpg"));
+        }
+        if (actionCommand.equalsIgnoreCase("attacker button2")) {
+            this.attackerRollB2.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(1) + ".jpg"));
+        }
+        if (actionCommand.equalsIgnoreCase("attacker button3")) {
+            this.attackerRollB3.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(2) + ".jpg"));
+        }
+
+        if (actionCommand.equalsIgnoreCase("defender button1")) {
+            this.defenderRollB1.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(0) + ".jpg"));
+        }
+
+        if (actionCommand.equalsIgnoreCase("defender button2")) {
+            this.defenderRollB2.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(1) + ".jpg"));
+        }
+
+        if (actionCommand.equalsIgnoreCase("done button")) {
+            this.dispose();
+            boardView.showLandsWithAttackAbility();
+            boardView.updateLandsAfterAttack(playing.getAttackerLandId());
+            boardView.updateLandsAfterAttack(playing.getDefenderLandId());
+            playing.finishTheAttack();
+        }
     }
 }
 

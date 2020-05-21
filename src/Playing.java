@@ -16,12 +16,16 @@ public class Playing {
     private Player defender;
     private int attackerDice;
     private int defenderDice;
-    private ArrayList<Integer> attackerRolls;
-    private ArrayList<Integer> defenderRolls;
+    private ArrayList<Integer> attackerRolls = new ArrayList<>();
+    private ArrayList<Integer> defenderRolls = new ArrayList<>();
 
     private Integer sourceId;
     private Integer destinationId;
+    private int numberOfSoldiersSent;
 
+    public void setNumberOfSoldiersSent(int numberOfSoldiersSent) {
+        this.numberOfSoldiersSent = numberOfSoldiersSent;
+    }
 
     public ArrayList<Integer> getAttackerRolls() {
         return attackerRolls;
@@ -105,12 +109,12 @@ public class Playing {
 
     public void attack() {
 
-        boardChecking = new GameBoardChecking();
+        boardChecking = new GameBoardChecking(this);
         if (boardChecking.getLandsWithAttackAbility().contains(attackerLandId)) {
             if (boardChecking.getForeignNeighbors(attackerLandId).contains(defenderLandId)) {
 
-                calcuteAttackerDice();
-                calcuteDefenderDice();
+                boardChecking.calcuteAttackerDice();
+                boardChecking.calcuteDefenderDice();
                 attackerLosses = 0;
                 defenderLosses = 0;
                 dice = new Dice();
@@ -143,12 +147,13 @@ public class Playing {
                 if (defenderLand.getNumberSoldiers() <= 0) {
                     defenderLand.setConqueror(attacker);
                     defenderLand.setNumberSoldiers(attackerDice - attackerLosses);
+                    attackerLand.decreaseSoldiers(attackerDice);
                     //سرزمین از دست رفته در لیست سرزمین های بازیکن باید حذف شود
                     attacker.addLand(defenderLandId);
                     defender.removeLand(defenderLandId);
                 }
 
-                finishTheAttack();
+                //finishTheAttack();
 
                 // Player defender = Map.getLandHashMap().get(defenderLandId).getConqueror();
             }
@@ -161,8 +166,8 @@ public class Playing {
         Land source = Map.getLandHashMap().get(sourceId);
         Land destination = Map.getLandHashMap().get(destinationId);
 
-        source.decreaseSoldiers(1);
-        destination.increaseSoldiers(1);
+        source.decreaseSoldiers(numberOfSoldiersSent);
+        destination.increaseSoldiers(numberOfSoldiersSent);
     }
 
 /*
@@ -184,7 +189,7 @@ public class Playing {
         }
     }*/
 
-    public void finishTheAttack(){
+    public void finishTheAttack() {
         this.attackerLandId = null;
         this.defenderLandId = null;
     }

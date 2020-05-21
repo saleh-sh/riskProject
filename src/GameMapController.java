@@ -2,7 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
+
 
 public class GameMapController implements ActionListener {
 
@@ -52,8 +52,16 @@ public class GameMapController implements ActionListener {
                 //خط پایین جایگزین خط بالا شد
                 boardView.showDefenderLand(landId);
                 boardView.returnPreviousState();
+
                 playing.attack();
-                boardView.showAttackerDicePanel();
+
+                //boardView.showAttackerDicePanel();
+                //boardView.showDefenderDicePanel();
+
+                //boardView.showLandsWithAttackAbility();
+
+                 new ShowDice(playing,boardView);
+
 
             }
         } else if (gamePhase.isCanFortify()) {
@@ -66,6 +74,7 @@ public class GameMapController implements ActionListener {
                 playing.setDestinationId(landId);
                 boardView.returnPreviousState();
                 boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
+                Suggestion suggestion = new Suggestion(playing);
                 playing.fortify();
                 boardView.getLandButtonByID(playing.getSourceId()).setText(Map.getLandHashMap().get(playing.getSourceId()).getNumberSoldiers() + "");
                 boardView.getLandButtonByID(playing.getDestinationId()).setText(Map.getLandHashMap().get(playing.getDestinationId()).getNumberSoldiers() + "");
@@ -73,6 +82,8 @@ public class GameMapController implements ActionListener {
         }
     }
 }
+
+
 
 class StagePanelController implements ActionListener {
 
@@ -107,35 +118,25 @@ class dicePanelController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        int index;
         String actionCommand = e.getActionCommand();
-        ImageIcon diceIcon;
-        if (actionCommand.equalsIgnoreCase("attacker button")) {
-            index = Arrays.asList(boardView.getAttackerRollsB()).indexOf(e.getSource());
-            diceIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(index) + ".jpg");
-            boardView.getAttackerRollsB()[index].setText(null);
-            boardView.getAttackerRollsB()[index].setIcon(diceIcon);
 
-
-            if (index + 1 < boardView.getAttackerRollsB().length) {
-                boardView.getAttackerRollsB()[index + 1].setEnabled(true);
-            } else {
-                boardView.getDefenderRollsB()[0].setEnabled(true);
-            }
-
+        if (actionCommand.equalsIgnoreCase("attacker button1")) {
+            boardView.getAttackerRollB1().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(0) + ".jpg"));
+        }
+        if (actionCommand.equalsIgnoreCase("attacker button2")) {
+            boardView.getAttackerRollB2().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(1) + ".jpg"));
+        }
+        if (actionCommand.equalsIgnoreCase("attacker button3")) {
+            boardView.getAttackerRollB3().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(2) + ".jpg"));
         }
 
-        if (actionCommand.equalsIgnoreCase("defender button")) {
-            index = Arrays.asList(boardView.getDefenderRollsB()).indexOf(e.getSource());
-            diceIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(index) + ".jpg");
-            boardView.getDefenderRollsB()[index].setText(null);
-            boardView.getDefenderRollsB()[index].setIcon(diceIcon);
-
-            if (index + 1 < boardView.getDefenderRollsB().length) {
-                boardView.getDefenderRollsB()[index + 1].setEnabled(true);
-            } else {
-                boardView.showRollResult();
-            }
+        if (actionCommand.equalsIgnoreCase("defender button1")) {
+            boardView.getDefenderRollB1().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(0) + ".jpg"));
         }
+
+        if (actionCommand.equalsIgnoreCase("defender button2")) {
+            boardView.getDefenderRollB2().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(1) + ".jpg"));
+        }
+
     }
 }
