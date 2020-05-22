@@ -5,16 +5,22 @@ import java.util.Objects;
 public class Player {
 
     private final String name;
-    private final String color;
+    private final String icon;
     private int soldiers;
+    private Color color;
 
     private ArrayList<Integer> conqueredLands;
 
-    public Player(String name, int soldiers,String color) {
+    public Player(String name, int soldiers, String icon, Color color) {
         this.name = name;
-        this.color = color;
+        this.icon = icon;
         this.soldiers = soldiers;
+        this.color = color;
         conqueredLands = new ArrayList<>();
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public String getName() {
@@ -22,7 +28,7 @@ public class Player {
     }
 
     public String getIcon() {
-        return color;
+        return icon;
     }
 
     public int getSoldiers() {
@@ -42,7 +48,7 @@ public class Player {
     }
 
     public void removeLand(int landId) {
-       int index = conqueredLands.indexOf(landId);
+        int index = conqueredLands.indexOf(landId);
         this.conqueredLands.remove(index);
     }
 
@@ -57,13 +63,13 @@ public class Player {
         Player player = (Player) o;
         return soldiers == player.soldiers &&
                 name.equals(player.name) &&
-                color.equals(player.color) &&
+                icon.equals(player.icon) &&
                 conqueredLands.equals(player.conqueredLands);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, color, soldiers, conqueredLands);
+        return Objects.hash(name, icon, soldiers, conqueredLands);
     }
 }
 

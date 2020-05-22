@@ -18,13 +18,12 @@ public class Playing {
     private int defenderDice;
     private ArrayList<Integer> attackerRolls = new ArrayList<>();
     private ArrayList<Integer> defenderRolls = new ArrayList<>();
-
+    private int numberOfSoldierSent;
     private Integer sourceId;
     private Integer destinationId;
-    private int numberOfSoldiersSent;
 
-    public void setNumberOfSoldiersSent(int numberOfSoldiersSent) {
-        this.numberOfSoldiersSent = numberOfSoldiersSent;
+    public void setNumberOfSoldierSent(int numberOfSoldierSent) {
+        this.numberOfSoldierSent = numberOfSoldierSent;
     }
 
     public ArrayList<Integer> getAttackerRolls() {
@@ -94,17 +93,14 @@ public class Playing {
             Map.getLandHashMap().get(landId).setConqueror(currentPlayer);
             currentPlayer.decreaseSoldiers(1);
             currentPlayer.addLand(landId);
-            System.out.println("method:put the bead :first if done");
 
         } else if (currentPlayer.getConqueredLands().contains(landId) == true && currentPlayer.getSoldiers() > 0) {
             Map.getLandHashMap().get(landId).increaseSoldiers(1);
             currentPlayer.decreaseSoldiers(1);
             System.out.println(currentPlayer.getSoldiers());
-            System.out.println("method:put the bead :second if done");
         } else {
             System.out.println("can not place the bead");
         }
-
     }
 
     public void attack() {
@@ -162,12 +158,16 @@ public class Playing {
     }
 
     public void fortify() {
-
+        System.out.println("fortify");
+         System.out.println("number of sent: "+ numberOfSoldierSent);
         Land source = Map.getLandHashMap().get(sourceId);
         Land destination = Map.getLandHashMap().get(destinationId);
-
-        source.decreaseSoldiers(numberOfSoldiersSent);
-        destination.increaseSoldiers(numberOfSoldiersSent);
+        System.out.println(source.getNumberSoldiers());
+        source.decreaseSoldiers(numberOfSoldierSent);
+        System.out.println(source.getNumberSoldiers());
+        System.out.println(destination.getNumberSoldiers());
+        destination.increaseSoldiers(numberOfSoldierSent);
+        System.out.println(destination.getNumberSoldiers());
     }
 
 /*
@@ -192,5 +192,10 @@ public class Playing {
     public void finishTheAttack() {
         this.attackerLandId = null;
         this.defenderLandId = null;
+    }
+
+    public void finishFortify(){
+        this.sourceId = null;
+        this.destinationId = null;
     }
 }

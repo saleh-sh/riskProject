@@ -10,6 +10,7 @@ public class GameMapController implements ActionListener {
     private BoardView boardView;
     private GamePhase gamePhase;
     private GameFlowControl gameFlowControl;
+    private ResultView resultView;
 
     public GameMapController(Playing playing, BoardView boardView, GamePhase gamePhase) {
         this.playing = playing;
@@ -54,13 +55,15 @@ public class GameMapController implements ActionListener {
                 boardView.returnPreviousState();
 
                 playing.attack();
+                resultView = new ResultView(boardView);
+                resultView.showResult();
 
                 //boardView.showAttackerDicePanel();
                 //boardView.showDefenderDicePanel();
 
                 //boardView.showLandsWithAttackAbility();
 
-                 new ShowDice(playing,boardView);
+                new ShowDice(playing, boardView);
 
 
             }
@@ -74,33 +77,53 @@ public class GameMapController implements ActionListener {
                 playing.setDestinationId(landId);
                 boardView.returnPreviousState();
                 boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
-                Suggestion suggestion = new Suggestion(playing);
-                playing.fortify();
-                boardView.getLandButtonByID(playing.getSourceId()).setText(Map.getLandHashMap().get(playing.getSourceId()).getNumberSoldiers() + "");
-                boardView.getLandButtonByID(playing.getDestinationId()).setText(Map.getLandHashMap().get(playing.getDestinationId()).getNumberSoldiers() + "");
+                new Suggestion(playing, boardView, gamePhase);
+                // playing.fortify();
+                //boardView.getLandButtonByID(playing.getSourceId()).setText(Map.getLandHashMap().get(playing.getSourceId()).getNumberSoldiers() + "");
+                // boardView.getLandButtonByID(playing.getDestinationId()).setText(Map.getLandHashMap().get(playing.getDestinationId()).getNumberSoldiers() + "");
+
             }
         }
     }
 }
 
 
-
 class StagePanelController implements ActionListener {
 
     private GamePhase gamePhase;
     private BoardView boardView;
+private GameBoardChecking boardChecking;
+private Playing playing;
 
-    public StagePanelController(GamePhase gamePhase, BoardView boardView) {
+    public StagePanelController(GamePhase gamePhase, BoardView boardView,GameBoardChecking gameBoardChecking,Playing playing) {
         this.gamePhase = gamePhase;
         this.boardView = boardView;
+        this.boardChecking = gameBoardChecking;
+        this.playing = playing;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         if (gamePhase.isCanAttack()) {
             gamePhase.setCanAttack(false);
+            boardView.returnPreviousState();
             gamePhase.setCanFortify(true);
-            //boardView.showLandsWithFortifyAbility();
+            boardView.updateStage();
+            boardView.showLandsWithFortifyAbility();
+        } else if (gamePhase.isCanFortify()) {
+            boardView.returnPreviousState();
+            gamePhase.setCanFortify(false);
+            /////
+            playing.finishFortify();
+            /////
+            gamePhase.setCanReinforce(true);
+            boardView.updateStage();
+            PlayersController.findCurrentPlayer();
+            boardView.showCurrentPlayer();
+            boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
+            boardView.updateNumberOfReadySPanel();
+            boardView.numberOfReadySoldiersPanelVisibility(true);
         }
     }
 }

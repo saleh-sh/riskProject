@@ -7,7 +7,7 @@ public class GameBoardChecking {
     private ArrayList<Integer> landsWithForeignNeighbor;
     //////////////////////////////////////////////////
     private HashSet<Integer> landsWithFortifyAbility;
-    private HashSet<Integer> destinationsID;
+    private HashSet<Integer> destinationsID = new HashSet<>();
 
     public GameBoardChecking(Playing playing) {
         this.playing = playing;
@@ -101,7 +101,6 @@ public class GameBoardChecking {
                 for (int neighborID : Map.getNeighbors(landIdInIndexI)) {
                     if (currentPlayer.getConqueredLands().contains(neighborID) == false) {
                         landsWithAttackAbility.add(landIdInIndexI);
-                        System.out.println("add land with attack ability");
                         break;
                     }
                 }
@@ -119,17 +118,18 @@ public class GameBoardChecking {
                 landsWithForeignNeighbor.add(neighborId);
             }
         }
-        System.out.println("add foreign neighbor for the land");
         return landsWithForeignNeighbor;
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\
     public void findLandsWithFortifyAbility() {
 
+        landsWithFortifyAbility = new HashSet<>();
         for (int i = 0; i < Map.getMapLength(); i++) {
             for (int j = 0; j < Map.getMapWidth(); j++) {
                 if (Map.getLands()[i][j] != null)
-                    if (Map.getLands()[i][j].getConqueror().equals(PlayersController.getCurrentPlayer())) {
+                    if (Map.getLands()[i][j].getConqueror().equals(PlayersController.getCurrentPlayer())&& Map.getLands()[i][j].getNumberSoldiers()>1) {
+                        landsWithFortifyAbility.add(Map.getLands()[i][j].getLandID());
                         findThePath(Map.getLands()[i][j].getLandID());
                     }
             }
@@ -140,7 +140,7 @@ public class GameBoardChecking {
 
         for (int neighborId : Map.getNeighbors(landId)) {
             if (Map.getLandHashMap().get(landId).getConqueror().equals(Map.getLandHashMap().get(neighborId).getConqueror())) {
-                if (landsWithFortifyAbility.contains(neighborId) == false) {
+                if (landsWithFortifyAbility.contains(neighborId) == false&&Map.getLandHashMap().get(neighborId).getNumberSoldiers()>1) {
                     landsWithFortifyAbility.add(neighborId);
                     findThePath(neighborId);
                 }

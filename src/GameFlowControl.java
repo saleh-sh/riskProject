@@ -1,5 +1,3 @@
-import javax.swing.*;
-
 public class GameFlowControl {
 
     private GamePhase gamePhase;
@@ -25,9 +23,12 @@ public class GameFlowControl {
             }
             if (i >= PlayersController.getNumberOfPlayers()) {
                 gamePhase.setPutBeadPhase(false);
-                System.out.println("put the bead false");
                 gamePhase.setCanReinforce(true);
+                /////
+                boardView.updateStage();
                 PlayersController.findCurrentPlayer();
+                /////////
+                boardView.showCurrentPlayer();
                 boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
                 /*
                 boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
@@ -38,6 +39,7 @@ public class GameFlowControl {
                 do {
                     PlayersController.findCurrentPlayer();
                 } while (PlayersController.getCurrentPlayer().getSoldiers() <= 0);
+                boardView.showCurrentPlayer();
                 /*
                 boardView.getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
                 boardView.getNumberOfReadySoldiers().setText("ready soldiers:" + PlayersController.getCurrentPlayer().getSoldiers());
@@ -59,6 +61,7 @@ public class GameFlowControl {
 
 
                 gamePhase.setCanAttack(true);
+                boardView.updateStage();
                 boardView.showLandsWithAttackAbility();
             }
         } else if (gamePhase.isCanAttack()) {
@@ -66,6 +69,5 @@ public class GameFlowControl {
         }
 
     }
-
 
 }

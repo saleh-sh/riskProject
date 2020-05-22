@@ -211,26 +211,21 @@ class SettingPlayersName extends JFrame implements ActionListener {
         String actionCommand = e.getActionCommand();
 
         if (actionCommand.equalsIgnoreCase("player one name")){
-            System.out.println("field 1");
             playersName[0] = playerOneName.getText();
         }
         if (actionCommand.equalsIgnoreCase("player two name")){
-            System.out.println("field 2");
             playersName[1] = playerTwoName.getText();
         }
         if (actionCommand.equalsIgnoreCase("player three name")){
-            System.out.println("field 3");
             playersName[2] = playerThreeName.getText();
         }
         if (actionCommand.equalsIgnoreCase("player four name")){
-            System.out.println("field 4");
             playersName[3] = playerFourName.getText();
         }
         if (actionCommand.equalsIgnoreCase("back button")){
             this.dispose();
         }
         if (actionCommand.equalsIgnoreCase("next button")){
-            System.out.println("next");
             preparation = new Preparation();
             preparation.gameBoardPreparation(playersName);
         }
