@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Objects;
 
 public class Player {
@@ -8,8 +9,8 @@ public class Player {
     private final String icon;
     private int soldiers;
     private Color color;
-
     private ArrayList<Integer> conqueredLands;
+    private final HashSet<Continent> conqueredContinents;
 
     public Player(String name, int soldiers, String icon, Color color) {
         this.name = name;
@@ -17,6 +18,7 @@ public class Player {
         this.soldiers = soldiers;
         this.color = color;
         conqueredLands = new ArrayList<>();
+        conqueredContinents = new HashSet<>();
     }
 
     public Color getColor() {
@@ -54,6 +56,10 @@ public class Player {
 
     public ArrayList<Integer> getConqueredLands() {
         return conqueredLands;
+    }
+
+    public HashSet<Continent> getConqueredContinents() {
+        return conqueredContinents;
     }
 
     @Override

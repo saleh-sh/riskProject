@@ -5,6 +5,22 @@ public class GamePhase {
     private boolean canAttack;
     private boolean canFortify;
 
+    private GameBoardChecking boardChecking ;
+    private Playing playing;
+    private BoardView boardView;
+
+    private boolean attackerChose;
+    private boolean defenderChose;
+    private boolean sourceChose;
+    private boolean destinationChose;
+    private boolean manualChange;
+
+    public GamePhase(GameBoardChecking boardChecking, Playing playing, BoardView boardView) {
+        this.boardChecking = boardChecking;
+        this.playing = playing;
+        this.boardView = boardView;
+    }
+
     {
         isPutBeadPhase = true;
         canReinforce = false;
@@ -42,5 +58,93 @@ public class GamePhase {
 
     public boolean isPutBeadPhase() {
         return isPutBeadPhase;
+    }
+
+
+    public void automaticPhaseChange() {
+
+        if (PlayersController.getCurrentPlayer().getSoldiers() > 0) {
+            canReinforce = true;
+            boardView.updateStage();
+            boardView.updateNumberOfReadySPanel();
+            boardView.numberOfReadySoldiersPanelVisibility(true);
+            return;
+        }else {
+            canReinforce = false;
+        }
+        if (boardChecking.getLandsWithAttackAbility().isEmpty() == false&& manualChange == false) {
+            canAttack = true;
+            boardView.updateStage();
+            if (attackerChose == false) {
+                boardView.showLandsWithAttackAbility();
+                attackerChose = true;
+                defenderChose = false;
+                return;
+            }
+            if (defenderChose == false) {
+                boardView.showForeignNeighborsOfLand(playing.getAttackerLandId());
+                defenderChose = true;
+                attackerChose = false;
+                return;
+            }
+        }else {
+            canAttack = false;
+           // manualChange = false;
+        }
+
+        boardChecking.findLandsWithFortifyAbility();
+        if (boardChecking.getLandsWithFortifyAbility().isEmpty() == false) {
+            canFortify = true;
+            boardView.updateStage();
+            if (sourceChose == false) {
+                System.out.println("sourceChose"+sourceChose);
+                boardView.showLandsWithFortifyAbility();
+                sourceChose = true;
+                destinationChose = false;
+                return;
+            }
+            if (destinationChose == false) {
+                System.out.println("destinationChose == false   "+destinationChose);
+                boardView.showDestinations(playing.getSourceId());
+                destinationChose = true;
+                sourceChose = false;
+                manualChange = false;
+                return;
+            }
+        }
+        manualChange = false;
+        PlayersController.findCurrentPlayer();
+        boardView.showCurrentPlayer();
+        boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
+        boardView.updateNumberOfReadySPanel();
+        automaticPhaseChange();
+    }
+
+    public boolean isAttackerChose() {
+        return attackerChose;
+    }
+
+    public boolean isSourceChose() {
+        return sourceChose;
+    }
+
+    public void setAttackerChose(boolean attackerChose) {
+        this.attackerChose = attackerChose;
+    }
+
+    public void setDefenderChose(boolean defenderChose) {
+        this.defenderChose = defenderChose;
+    }
+
+    public void setSourceChose(boolean sourceChose) {
+        this.sourceChose = sourceChose;
+    }
+
+    public void setDestinationChose(boolean destinationChose) {
+        this.destinationChose = destinationChose;
+    }
+
+    public void setManualChange(boolean manualChange) {
+        this.manualChange = manualChange;
     }
 }

@@ -40,13 +40,14 @@ public class GameMapController implements ActionListener {
 
         } else if (gamePhase.isCanAttack()) {
 
-            if (playing.getAttackerLandId() == null) {
+            if (/*playing.getAttackerLandId() == null*/gamePhase.isAttackerChose()) {
                 playing.setAttackerLandId(landId);
                 //boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
                 //خط پایین جایگزین خط بالا است
                 boardView.showAttackerLand(landId);
                 boardView.returnPreviousState();
-                boardView.showForeignNeighborsOfLand(landId);
+                ///////////////////////////////////////////////////////////boardView.showForeignNeighborsOfLand(landId);
+                gamePhase.automaticPhaseChange();
             } else {
                 playing.setDefenderLandId(landId);
                 //boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
@@ -63,25 +64,24 @@ public class GameMapController implements ActionListener {
 
                 //boardView.showLandsWithAttackAbility();
 
-                new ShowDice(playing, boardView);
-
+                new ShowDice(playing, boardView,gamePhase);
 
             }
         } else if (gamePhase.isCanFortify()) {
-            if (playing.getSourceId() == null) {
+            if (/*playing.getSourceId() == null*/gamePhase.isSourceChose()) {
                 playing.setSourceId(landId);
-                boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
+                boardView.showSourceLand(playing.getSourceId());
                 boardView.returnPreviousState();
-                boardView.showDestinations(playing.getSourceId());
+                ////////////////////////////////////////////////////////boardView.showDestinations(playing.getSourceId());
+                gamePhase.automaticPhaseChange();
             } else {
                 playing.setDestinationId(landId);
                 boardView.returnPreviousState();
-                boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
+                boardView.showDestinationLand(landId);
                 new Suggestion(playing, boardView, gamePhase);
                 // playing.fortify();
                 //boardView.getLandButtonByID(playing.getSourceId()).setText(Map.getLandHashMap().get(playing.getSourceId()).getNumberSoldiers() + "");
                 // boardView.getLandButtonByID(playing.getDestinationId()).setText(Map.getLandHashMap().get(playing.getDestinationId()).getNumberSoldiers() + "");
-
             }
         }
     }
@@ -107,21 +107,29 @@ private Playing playing;
 
         if (gamePhase.isCanAttack()) {
             gamePhase.setCanAttack(false);
+            gamePhase.setManualChange(true);
             boardView.returnPreviousState();
-            gamePhase.setCanFortify(true);
+            //////////////////////////////////////////////////////////////////////////////gamePhase.setCanFortify(true);
             boardView.updateStage();
-            boardView.showLandsWithFortifyAbility();
+            gamePhase.setAttackerChose(false);
+            gamePhase.setDefenderChose(false);
+            /////////////////////////////////////////////////////////////////////boardView.showLandsWithFortifyAbility();
+            gamePhase.automaticPhaseChange();
         } else if (gamePhase.isCanFortify()) {
             boardView.returnPreviousState();
             gamePhase.setCanFortify(false);
+            gamePhase.setSourceChose(false);
+            gamePhase.setDestinationChose(false);
+            gamePhase.setManualChange(false);
             /////
             playing.finishFortify();
             /////
-            gamePhase.setCanReinforce(true);
+            /////////////////////////////////////////////////////////////////////////////gamePhase.setCanReinforce(true);
             boardView.updateStage();
             PlayersController.findCurrentPlayer();
             boardView.showCurrentPlayer();
             boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
+            gamePhase.automaticPhaseChange();
             boardView.updateNumberOfReadySPanel();
             boardView.numberOfReadySoldiersPanelVisibility(true);
         }

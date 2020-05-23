@@ -120,10 +120,10 @@ public class Playing {
                 Collections.reverse(attackerRolls);
                 Collections.sort(defenderRolls);
                 Collections.reverse(defenderRolls);
-                System.out.println("defender dice" + defenderDice);
-                System.out.println("attacker dice" + attackerDice);
-                System.out.println("defender rolls" + defenderRolls);
-                System.out.println("attacker rolls" + attackerRolls);
+               // System.out.println("defender dice" + defenderDice);
+               // System.out.println("attacker dice" + attackerDice);
+               // System.out.println("defender rolls" + defenderRolls);
+               // System.out.println("attacker rolls" + attackerRolls);
                 for (int i = 0; i < defenderDice && i < attackerDice; i++) {
                     if (defenderRolls.get(i) >= attackerRolls.get(i)) {
                         attackerLosses++;

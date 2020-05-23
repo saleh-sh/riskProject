@@ -12,8 +12,8 @@ import java.util.*;
 
 public class BoardView extends JFrame {
     private Playing playing = new Playing();
-    private GamePhase gamePhase = new GamePhase();
     private GameBoardChecking boardChecking = new GameBoardChecking(playing);
+    private GamePhase gamePhase = new GamePhase(boardChecking,playing,this);
 
 
     GameMapController gameMapController = new GameMapController(playing, this, gamePhase);
@@ -375,7 +375,8 @@ public class BoardView extends JFrame {
                 playerFourLabel.setIcon(arrowIcon);
             }
         } catch (NullPointerException nullPointerException) {
-            nullPointerException.printStackTrace();
+           // nullPointerException.printStackTrace();
+            nullPointerException.getMessage();
         }
 
     }
@@ -542,6 +543,12 @@ public class BoardView extends JFrame {
         targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
     }
 
+    public void updateLandsAfterFortify(int landId){
+        landButtonMap.get(landId).setBorder(new CompoundBorder());
+        landButtonMap.get(landId).setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
+        landButtonMap.get(landId).setIcon(new ImageIcon(Map.getLandHashMap().get(landId).getConqueror().getIcon() + ".jpg"));
+    }
+
     public void updateNumberOfReadySPanel() {
         getLabel().setIcon(new ImageIcon(PlayersController.getCurrentPlayer().getIcon() + ".jpg"));
         getNumberOfReadySoldiers().setText("ready soldiers: " + PlayersController.getCurrentPlayer().getSoldiers());
@@ -551,10 +558,15 @@ public class BoardView extends JFrame {
         getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
     }
 
+    public void showSourceLand(int landId){
+        getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK,8));
+    }
+    public void showDestinationLand(int landId){
+        getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE,8));
+    }
     public void showDefenderLand(int landId) {
         getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
     }
-
 
     public void updateLandsAfterAttack(int landId) {
         landButtonMap.get(landId).setBorder(new CompoundBorder());
@@ -569,16 +581,16 @@ public class BoardView extends JFrame {
     public void updateStage() {
 
         Border border = BorderFactory.createLineBorder(Color.BLACK, 14);
+        fortifyLabel.setBorder(null);
+        attackLabel.setBorder(null);
+        reinforceLabel.setBorder(null);
         if (gamePhase.isCanReinforce()) {
-            fortifyLabel.setBorder(null);
             reinforceLabel.setBorder(border);
         }
         if (gamePhase.isCanAttack()) {
-            reinforceLabel.setBorder(null);
             attackLabel.setBorder(border);
         }
         if (gamePhase.isCanFortify()) {
-            attackLabel.setBorder(null);
             fortifyLabel.setBorder(border);
         }
     }
@@ -653,20 +665,22 @@ class Suggestion extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 Suggestion.this.playing.setNumberOfSoldierSent(numOfSoldiers.getValue());
                 Suggestion.this.playing.fortify();
-                Suggestion.this.boardView.updateGameMap(Suggestion.this.playing.getSourceId());
-                Suggestion.this.boardView.updateGameMap(Suggestion.this.playing.getDestinationId());
+                Suggestion.this.boardView.updateLandsAfterFortify(Suggestion.this.playing.getSourceId());
+                Suggestion.this.boardView.updateLandsAfterFortify(Suggestion.this.playing.getDestinationId());
                 Suggestion.this.gamePhase.setCanFortify(false);
                 ////
                 Suggestion.this.playing.finishFortify();
                 ////
-                Suggestion.this.gamePhase.setCanReinforce(true);
-                do {
+                /////////////////////////////////////////////////////////Suggestion.this.gamePhase.setCanReinforce(true);
+
                     PlayersController.findCurrentPlayer();
-                }while (PlayersController.getCurrentPlayer().getSoldiers() == 0);
+                    Suggestion.this.boardView.showCurrentPlayer();
                 Suggestion.this.boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
+                    Suggestion.this.gamePhase.automaticPhaseChange();
+
                 Suggestion.this.boardView.updateStage();
-                Suggestion.this.boardView.updateNumberOfReadySPanel();
-                Suggestion.this.boardView.numberOfReadySoldiersPanelVisibility(true);
+                /////////////////////////////////////////////////////////////////Suggestion.this.boardView.updateNumberOfReadySPanel();
+                ///////////////////////////////////////////////////////////////////Suggestion.this.boardView.numberOfReadySoldiersPanelVisibility(true);
                 Suggestion.this.dispose();
             }
         });
@@ -681,7 +695,7 @@ class Suggestion extends JDialog {
 class ShowDice extends JDialog implements ActionListener {
     private JPanel attackerDicePanel;
     private JPanel defenderDicePanel;
-    JButton attackerRollB1;
+    private JButton attackerRollB1;
     JButton attackerRollB2;
     JButton attackerRollB3;
     JButton defenderRollB1;
@@ -690,10 +704,11 @@ class ShowDice extends JDialog implements ActionListener {
     Playing playing;
     BoardView boardView;
     JButton done;
-
-    public ShowDice(Playing playing, BoardView boardView) {
+GamePhase gamePhase;
+    public ShowDice(Playing playing, BoardView boardView , GamePhase gamePhase) {
         this.playing = playing;
         this.boardView = boardView;
+        this.gamePhase = gamePhase;
 
         this.setBounds(30, 150, 300, 280);
         setUndecorated(true);
@@ -796,6 +811,7 @@ class ShowDice extends JDialog implements ActionListener {
         if (actionCommand.equalsIgnoreCase("done button")) {
             this.dispose();
             boardView.showLandsWithAttackAbility();
+            gamePhase.automaticPhaseChange();
             boardView.updateLandsAfterAttack(playing.getAttackerLandId());
             boardView.updateLandsAfterAttack(playing.getDefenderLandId());
             playing.finishTheAttack();
