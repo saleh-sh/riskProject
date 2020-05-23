@@ -659,12 +659,12 @@ class Suggestion extends JDialog {
                 ////
                 Suggestion.this.playing.finishFortify();
                 ////
+                Suggestion.this.gamePhase.setCanReinforce(true);
                 do {
                     PlayersController.findCurrentPlayer();
                 }while (PlayersController.getCurrentPlayer().getSoldiers() == 0);
-                Suggestion.this.gamePhase.setCanReinforce(true);
-                Suggestion.this.boardView.updateStage();
                 Suggestion.this.boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
+                Suggestion.this.boardView.updateStage();
                 Suggestion.this.boardView.updateNumberOfReadySPanel();
                 Suggestion.this.boardView.numberOfReadySoldiersPanelVisibility(true);
                 Suggestion.this.dispose();
