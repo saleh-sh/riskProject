@@ -135,7 +135,6 @@ class SettingPlayersName extends JFrame implements ActionListener {
 
     public SettingPlayersName() {
 
-
         this.playerCount = PlayersController.getNumberOfPlayers();
         setExtendedState(MAXIMIZED_BOTH);
         setUndecorated(true);

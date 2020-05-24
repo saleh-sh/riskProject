@@ -2,6 +2,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
@@ -190,7 +191,7 @@ public class BoardView extends JFrame {
                             landButtons[i][j].setText(text);
                             landButtons[i][j].setFont(new Font("Algerian", Font.BOLD, 20));
                             try {
-                                Thread.sleep(160);
+                                Thread.sleep(150);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -358,45 +359,41 @@ public class BoardView extends JFrame {
         String name = PlayersController.getCurrentPlayer().getName();
         Icon arrowIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\arrows.png");
         int numberOfPlayers = PlayersController.getNumberOfPlayers();
+
+        playerOneLabel.setIcon(null);
+        playerTwoLabel.setIcon(null);
+        if (numberOfPlayers == 3||numberOfPlayers ==4){
+            playerThreeLabel.setIcon(null);
+        }
+        if (numberOfPlayers==4){
+            playerFourLabel.setIcon(null);
+        }
+
         if (name.equalsIgnoreCase(playerOneLabel.getText())) {
-            if (numberOfPlayers == 2) {
-                playerTwoLabel.setIcon(null);
-            }
-            if (numberOfPlayers == 3) {
-                playerThreeLabel.setIcon(null);
-            }
-            if (numberOfPlayers == 4) {
-                playerFourLabel.setIcon(null);
-            }
             playerOneLabel.setIcon(arrowIcon);
         }
 
         if (name.equalsIgnoreCase(playerTwoLabel.getText())) {
-            playerOneLabel.setIcon(null);
             playerTwoLabel.setIcon(arrowIcon);
         }
 
         try {
             if (name.equalsIgnoreCase(playerThreeLabel.getText())) {
-                playerTwoLabel.setIcon(null);
                 playerThreeLabel.setIcon(arrowIcon);
             }
 
             if (name.equalsIgnoreCase(playerFourLabel.getText())) {
-                playerThreeLabel.setIcon(null);
                 playerFourLabel.setIcon(arrowIcon);
             }
         } catch (NullPointerException nullPointerException) {
             // nullPointerException.printStackTrace();
             nullPointerException.getMessage();
         }
-
     }
 
     public void showBackButton() {
 
         JButton backToMenu = new JButton(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\back.png"));
-        backToMenu.setBounds(10, 900, 100, 90);
         backToMenu.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
