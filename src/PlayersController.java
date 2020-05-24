@@ -1,16 +1,16 @@
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PlayersController {
 
     private static ArrayList<Player> playerList;
     private static int numberOfPlayers;
     private static Player currentPlayer;
+    private static RoundsCounter roundsCounter;
 
     public PlayersController() {
+        roundsCounter = new RoundsCounter();
     }
-
 
     public void createPlayers(String[] playersNames) {
 
@@ -30,14 +30,14 @@ public class PlayersController {
         PlayersController.numberOfPlayers = numberOfPlayers;
     }
 
-
     public static int getNumberOfPlayers() {
         return numberOfPlayers;
     }
 
     public static void findCurrentPlayer() {
+
+        roundsCounter.increaseNumberOfTurns();
         playerList.add(playerList.get(0));
-        // currentPlayer = playerList.get(0);
         currentPlayer = playerList.remove(0);
 
     }
@@ -56,4 +56,7 @@ public class PlayersController {
         return currentPlayer;
     }
 
+    public static RoundsCounter getRoundsCounter() {
+        return roundsCounter;
+    }
 }

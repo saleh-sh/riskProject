@@ -127,6 +127,7 @@ private Playing playing;
             /////////////////////////////////////////////////////////////////////////////gamePhase.setCanReinforce(true);
             boardView.updateStage();
             PlayersController.findCurrentPlayer();
+            boardView.updateRounds();
             boardView.showCurrentPlayer();
             boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
             gamePhase.automaticPhaseChange();

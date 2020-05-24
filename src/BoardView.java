@@ -2,7 +2,6 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EtchedBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
@@ -15,8 +14,7 @@ public class BoardView extends JFrame {
     private Playing playing = new Playing();
     private GameBoardChecking boardChecking = new GameBoardChecking(playing);
     private GamePhase gamePhase = new GamePhase(boardChecking, playing, this);
-    private PlayersController playersController;
-    private GameMapController gameMapController;// = new GameMapController(playing, this, gamePhase);
+    private GameMapController gameMapController = new GameMapController(playing, this, gamePhase);
 
 
     private LandButton[][] landButtons;
@@ -60,27 +58,8 @@ public class BoardView extends JFrame {
     private JLabel playerThreeLabel;
     private JLabel playerFourLabel;
 
-
-    public BoardView() {
-
-        this.setExtendedState(MAXIMIZED_BOTH);
-        this.setUndecorated(false);
-        this.setLayout(null);
-        this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
-        this.add(gameMap());
-        this.add(showStageOfGamePanel());
-        this.add(showNumberOfReadySoldiers());
-        //this.add(showDicePanel());
-        this.add(showElapsedTime());
-        this.add(getPlayersNamePanel());
-        this.setVisible(true);
-    }
-
-    public BoardView(Playing playing) throws HeadlessException {
-        this();
-        this.playing = playing;
-    }
-////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+    private JPanel roundsPanel;
+    private JLabel roundsLabel;
 
     public JButton getAttackerRollB1() {
         return attackerRollB1;
@@ -102,10 +81,6 @@ public class BoardView extends JFrame {
         return defenderRollB2;
     }
 
-    public Playing getPlaying() {
-        return playing;
-    }
-
     public JLabel getSecondsLabel() {
         return secondsLabel;
     }
@@ -122,6 +97,26 @@ public class BoardView extends JFrame {
         return attackerDicePanel;
     }
 
+
+    public BoardView() {
+
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.setUndecorated(true);
+        this.setLayout(null);
+        this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
+        this.add(gameMap());
+        this.add(showStageOfGamePanel());
+        this.add(showNumberOfReadySoldiers());
+        //this.add(showDicePanel());
+        this.add(showElapsedTime());
+        this.add(getPlayersNamePanel());
+        this.add(getRoundsPanel());
+        this.showBackButton();
+        this.setVisible(true);
+    }
+
+
+    ////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public JLabel getNumberOfReadySoldiers() {
         return numberOfReadySoldiers;
     }
@@ -149,7 +144,6 @@ public class BoardView extends JFrame {
         gameMap.setBounds(350, 150, 1300, 500);
         landButtons = new LandButton[Map.getMapLength()][Map.getMapWidth()];
         landButtonMap = new HashMap<>();
-        gameMapController = new GameMapController(playing, this, gamePhase);
         int i, j;
         int id = 1;
         for (i = 0; i < Map.getMapLength(); i++) {
@@ -196,7 +190,7 @@ public class BoardView extends JFrame {
                             landButtons[i][j].setText(text);
                             landButtons[i][j].setFont(new Font("Algerian", Font.BOLD, 20));
                             try {
-                                Thread.sleep(180);
+                                Thread.sleep(160);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -296,6 +290,20 @@ public class BoardView extends JFrame {
         return numberOfSoldiersPanel;
     }
 
+    public JPanel getRoundsPanel() {
+
+        roundsPanel = new JPanel();
+        roundsPanel.setBounds(80, 80, 150, 50);
+        roundsPanel.setBackground(Color.BLACK);
+
+        roundsLabel = new JLabel("rounds: " + PlayersController.getRoundsCounter().countRounds());
+        roundsLabel.setFont(new Font("Algerian", Font.BOLD, 20));
+        roundsLabel.setForeground(Color.WHITE);
+
+        roundsPanel.add(roundsLabel);
+        return roundsPanel;
+    }
+
     public JPanel getPlayersNamePanel() {
 
         ArrayList<Player> players = new ArrayList(PlayersController.getPlayerList());
@@ -385,101 +393,20 @@ public class BoardView extends JFrame {
 
     }
 
-    public void showAttackerDicePanel() {
+    public void showBackButton() {
 
-        attackerDicePanel = new JPanel();
-        attackerDicePanel.setBounds(10, 80, 150, 200);
-        attackerDicePanel.setBackground(Color.DARK_GRAY);
-        GridLayout gridLayout = new GridLayout(3, 1);
-
-        attackerRollB1 = new JButton("attacker");
-        attackerRollB1.setActionCommand("attacker button1");
-        attackerRollB1.addActionListener(new dicePanelController(this, playing));
-        attackerDicePanel.add(attackerRollB1);
-
-        if (playing.getAttackerDice() == 2 || playing.getAttackerDice() == 3) {
-            attackerRollB2 = new JButton("attacker");
-            attackerRollB2.setActionCommand("attacker button2");
-            attackerRollB2.addActionListener(new dicePanelController(this, playing));
-            attackerDicePanel.add(attackerRollB2);
-        }
-
-        if (playing.getAttackerDice() == 3) {
-            attackerRollB3 = new JButton("attacker");
-            attackerRollB3.setActionCommand("attacker button3");
-            attackerRollB3.addActionListener(new dicePanelController(this, playing));
-            attackerDicePanel.add(attackerRollB3);
-        }
-
-        attackerDicePanel.setLayout(gridLayout);
-        this.add(attackerDicePanel);
-    }
-
-
-    public void showDefenderDicePanel() {
-
-        defenderDicePanel = new JPanel();
-        defenderDicePanel.setBounds(180, 80, 150, 180);
-        defenderDicePanel.setBackground(Color.DARK_GRAY);
-        GridLayout gridLayout = new GridLayout(2, 1);
-
-        defenderRollB1 = new JButton("defender");
-        defenderRollB1.setActionCommand("defender button1");
-        defenderRollB1.addActionListener(new dicePanelController(this, playing));
-        defenderDicePanel.add(defenderRollB1);
-
-        if (playing.getDefenderDice() == 2) {
-            defenderRollB2 = new JButton("defender");
-            defenderRollB2.setActionCommand("defender button2");
-            defenderRollB2.addActionListener(new dicePanelController(this, playing));
-            defenderDicePanel.add(defenderRollB2);
-        }
-
-        defenderDicePanel.setLayout(gridLayout);
-        this.add(defenderDicePanel);
-    }
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    public void showRollsResult() {
-
-        JPanel attackerRollsPanel = new JPanel();
-        attackerRollsPanel.setBounds(20, 500, 150, 280);
-        attackerRollsPanel.setBackground(Color.RED);
-        GridLayout gridLayout = new GridLayout(3, 1);
-
-        JPanel defenderRollsPanel = new JPanel();
-        defenderRollsPanel.setBounds(180, 500, 150, 190);
-        defenderRollsPanel.setBackground(Color.ORANGE);
-        GridLayout gridLayout1 = new GridLayout(2, 1);
-
-
-        JLabel[] AResultRolls = new JLabel[playing.getAttackerDice()];
-        JLabel[] DResultRolls = new JLabel[playing.getDefenderDice()];
-        ArrayList<Integer> attackerRolls = playing.getAttackerRolls();
-        ArrayList<Integer> defenderRolls = playing.getDefenderRolls();
-
-        for (int i = 0; i < attackerRolls.size() && i < defenderRolls.size(); i++) {
-            AResultRolls[i] = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + attackerRolls.get(i) + ".jpg"));
-            DResultRolls[i] = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + defenderRolls.get(i) + ".jpg"));
-            if (attackerRolls.get(i) <= defenderRolls.get(i)) {
-                AResultRolls[i].setBackground(Color.RED);
-                DResultRolls[i].setBackground(Color.green);
-            } else {
-                AResultRolls[i].setBackground(Color.green);
-                DResultRolls[i].setBackground(Color.RED);
+        JButton backToMenu = new JButton(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\back.png"));
+        backToMenu.setBounds(10, 900, 100, 90);
+        backToMenu.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RiskView riskView = new RiskView();
+                BoardView.this.dispose();
             }
-
-            attackerRollsPanel.add(AResultRolls[i]);
-            defenderRollsPanel.add(DResultRolls[i]);
-        }
-
-        attackerRollsPanel.setLayout(gridLayout);
-        defenderRollsPanel.setLayout(gridLayout1);
-        this.add(attackerRollsPanel);
-        this.add(defenderRollsPanel);
+        });
+        this.add(backToMenu);
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void showLandsWithAttackAbility() {
 
         boardChecking = new GameBoardChecking(playing);
@@ -578,6 +505,10 @@ public class BoardView extends JFrame {
         landButtonMap.get(landId).setBorder(new CompoundBorder());
         landButtonMap.get(landId).setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
         landButtonMap.get(landId).setIcon(new ImageIcon(Map.getLandHashMap().get(landId).getConqueror().getIcon() + ".jpg"));
+    }
+
+    public void updateRounds() {
+        roundsLabel.setText("rounds: " + PlayersController.getRoundsCounter().countRounds());
     }
 
     public void numberOfReadySoldiersPanelVisibility(boolean state) {
@@ -680,6 +611,7 @@ class Suggestion extends JDialog {
                 /////////////////////////////////////////////////////////Suggestion.this.gamePhase.setCanReinforce(true);
 
                 PlayersController.findCurrentPlayer();
+                Suggestion.this.boardView.updateRounds();
                 Suggestion.this.boardView.showCurrentPlayer();
                 Suggestion.this.boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
                 Suggestion.this.gamePhase.automaticPhaseChange();

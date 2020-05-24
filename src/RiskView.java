@@ -18,7 +18,6 @@ public class RiskView extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
-
         setMenuButton();
 
         setVisible(true);
@@ -34,6 +33,7 @@ public class RiskView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 PlayerCount playerCount = new PlayerCount();
+                RiskView.this.dispose();
             }
         });
 
@@ -103,14 +103,7 @@ class PlayerCount extends JFrame {
         fourPlayer.addActionListener(playerCountController);
         ImageIcon fourPlayerIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\fourPlayer.png");
         fourPlayer.setIcon(fourPlayerIcon);
-/*
-        nextButton = new JButton("next");
-        nextButton.setBounds(870, 700, 114, 105);
-        nextButton.setActionCommand("next button");
-        nextButton.addActionListener(playerCountController);
-        Icon nextIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\next.png");
-        nextButton.setIcon(nextIcon);
-*/
+
         backButton = new JButton("back");
         backButton.setBounds(100, 900, 114, 95);
         backButton.addActionListener(playerCountController);
@@ -119,7 +112,6 @@ class PlayerCount extends JFrame {
         backButton.setActionCommand("back button");
 
         this.add(measage);
-        //  this.add(nextButton);
         this.add(twoPlayer);
         this.add(threePlayer);
         this.add(fourPlayer);
@@ -210,24 +202,26 @@ class SettingPlayersName extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand();
 
-        if (actionCommand.equalsIgnoreCase("player one name")){
+        if (actionCommand.equalsIgnoreCase("player one name")) {
             playersName[0] = playerOneName.getText();
         }
-        if (actionCommand.equalsIgnoreCase("player two name")){
+        if (actionCommand.equalsIgnoreCase("player two name")) {
             playersName[1] = playerTwoName.getText();
         }
-        if (actionCommand.equalsIgnoreCase("player three name")){
+        if (actionCommand.equalsIgnoreCase("player three name")) {
             playersName[2] = playerThreeName.getText();
         }
-        if (actionCommand.equalsIgnoreCase("player four name")){
+        if (actionCommand.equalsIgnoreCase("player four name")) {
             playersName[3] = playerFourName.getText();
         }
-        if (actionCommand.equalsIgnoreCase("back button")){
+        if (actionCommand.equalsIgnoreCase("back button")) {
             this.dispose();
+            PlayerCount playerCount = new PlayerCount();
         }
-        if (actionCommand.equalsIgnoreCase("next button")){
+        if (actionCommand.equalsIgnoreCase("next button")) {
             preparation = new Preparation();
             preparation.gameBoardPreparation(playersName);
+            this.dispose();
         }
     }
 }

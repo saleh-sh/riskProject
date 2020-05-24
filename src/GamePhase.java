@@ -114,6 +114,7 @@ public class GamePhase {
         }
         manualChange = false;
         PlayersController.findCurrentPlayer();
+        boardView.updateRounds();
         boardView.showCurrentPlayer();
         boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
         boardView.updateNumberOfReadySPanel();

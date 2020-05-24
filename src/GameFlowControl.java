@@ -27,6 +27,7 @@ public class GameFlowControl {
                 gamePhase.setCanReinforce(true);
                 boardView.updateStage();
                 PlayersController.findCurrentPlayer();
+                boardView.updateRounds();
                 boardView.showCurrentPlayer();
                 boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
                 boardView.updateNumberOfReadySPanel();
@@ -34,6 +35,7 @@ public class GameFlowControl {
                 do {
                     PlayersController.findCurrentPlayer();
                 } while (PlayersController.getCurrentPlayer().getSoldiers() <= 0);
+                boardView.updateRounds();
                 boardView.showCurrentPlayer();
                 boardView.updateNumberOfReadySPanel();
             }

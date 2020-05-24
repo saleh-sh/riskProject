@@ -28,9 +28,9 @@ public class SetPlayerCountController implements ActionListener {
             playersName = new SettingPlayersName();
         }
         if (actionCommand.equalsIgnoreCase("back button")) {
-            playerCount.dispose();
+            RiskView riskView = new RiskView();
         }
-
+        playerCount.dispose();
     }
 }
 

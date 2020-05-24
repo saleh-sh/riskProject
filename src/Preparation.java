@@ -4,19 +4,19 @@ import java.util.Date;
 
 public class Preparation {
 
-    private PlayersController playersController;
-    private BoardView boardView;
+    PlayersController playersController;
+    BoardView boardView;
 
     public void gameBoardPreparation(String[] playersName) {
-
+        System.out.println("prepration method");
         playersController = new PlayersController();
         playersController.createPlayers(playersName);
         Map.createLands();
         Map.setSeas();
         PlayersController.findCurrentPlayer();
         divideLands();
-        Playing playing = new Playing();
-        boardView = new BoardView(playing);
+
+        boardView = new BoardView();
         boardView.showTheDivisionOfSoldiers();
         boardView.showCurrentPlayer();
     }
