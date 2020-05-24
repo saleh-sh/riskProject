@@ -362,10 +362,10 @@ public class BoardView extends JFrame {
 
         playerOneLabel.setIcon(null);
         playerTwoLabel.setIcon(null);
-        if (numberOfPlayers == 3||numberOfPlayers ==4){
+        if (numberOfPlayers == 3 || numberOfPlayers == 4) {
             playerThreeLabel.setIcon(null);
         }
-        if (numberOfPlayers==4){
+        if (numberOfPlayers == 4) {
             playerFourLabel.setIcon(null);
         }
 
@@ -394,6 +394,7 @@ public class BoardView extends JFrame {
     public void showBackButton() {
 
         JButton backToMenu = new JButton(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\back.png"));
+        backToMenu.setBounds(20, 950, 120, 80);
         backToMenu.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -755,7 +756,7 @@ class ShowDice extends JDialog implements ActionListener {
     }
 }
 
-
+/*
 class ResultView {
 
     private Result result;
@@ -773,6 +774,49 @@ class ResultView {
         }
         if (result.isPlayerWon()) {
             JOptionPane.showMessageDialog(boardView, result.getWinner().getName() + " you won!!!");
+        }
+    }
+}
+
+*/
+class ResultView extends JDialog {
+
+    private Result result;
+
+    private JLabel loserMessage;
+    private JLabel winnerMessage;
+
+    public ResultView() {
+        this.setBounds(500, 500, 400, 400);
+        this.setLayout(null);
+        this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\DbackG.jpg")));
+        this.showResult();
+    }
+
+    public void showResult() {
+        result = new Result();
+        result.findResult();
+
+        if (result.isPlayerWon()) {
+            winnerMessage = new JLabel(result.getWinner().getName() + " won!!!");
+            winnerMessage.setFont(new Font("Algerian", Font.BOLD, 40));
+            winnerMessage.setBounds(100, 200, 500, 50);
+            JLabel winnerIcon = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + result.getWinner().getIcon() + ".jpg"));
+            winnerIcon.setBounds(300, 200, 70, 70);
+            this.add(winnerMessage);
+            this.add(winnerIcon);
+            this.setVisible(true);
+            return;
+        }
+        if (result.isPlayerLose()) {
+            loserMessage = new JLabel(result.getLoser().getName() + " lost!!!");
+            loserMessage.setFont(new Font("Algerian", Font.BOLD, 40));
+            loserMessage.setBounds(100, 200, 500, 50);
+            JLabel loserIcon = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + result.getLoser().getIcon() + ".jpg"));
+            loserIcon.setBounds(300,200,70,70);
+            this.add(loserIcon);
+            this.add(loserMessage);
+            this.setVisible(true);
         }
     }
 }

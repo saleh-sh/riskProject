@@ -122,16 +122,19 @@ class PlayerCount extends JFrame {
 class SettingPlayersName extends JFrame implements ActionListener {
 
     private int playerCount;
+
     private JTextField playerOneName;
     private JTextField playerTwoName;
     private JTextField playerThreeName;
     private JTextField playerFourName;
+
     private JButton nextButton;
     private JButton backButton;
 
     private String[] playersName;
 
     private Preparation preparation;
+
 
     public SettingPlayersName() {
 
@@ -213,14 +216,19 @@ class SettingPlayersName extends JFrame implements ActionListener {
         if (actionCommand.equalsIgnoreCase("player four name")) {
             playersName[3] = playerFourName.getText();
         }
+
+
         if (actionCommand.equalsIgnoreCase("back button")) {
             this.dispose();
             PlayerCount playerCount = new PlayerCount();
         }
+
+
         if (actionCommand.equalsIgnoreCase("next button")) {
             preparation = new Preparation();
             preparation.gameBoardPreparation(playersName);
             this.dispose();
         }
+
     }
 }

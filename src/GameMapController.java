@@ -56,9 +56,12 @@ public class GameMapController implements ActionListener {
                 boardView.returnPreviousState();
 
                 playing.attack();
-                resultView = new ResultView(boardView);
-                resultView.showResult();
 
+
+
+                //resultView = new ResultView(boardView);
+                resultView = new ResultView();
+                    resultView.showResult();
                 //boardView.showAttackerDicePanel();
                 //boardView.showDefenderDicePanel();
 
