@@ -4,19 +4,19 @@ import java.util.Date;
 
 public class Preparation {
 
-    PlayersController playersController;
-    BoardView boardView;
+    private PlayersController playersController;
+    private BoardView boardView;
 
     public void gameBoardPreparation(String[] playersName) {
-        System.out.println("prepration method");
+
         playersController = new PlayersController();
         playersController.createPlayers(playersName);
         Map.createLands();
         Map.setSeas();
         PlayersController.findCurrentPlayer();
         divideLands();
-
-        boardView = new BoardView();
+        Playing playing = new Playing();
+        boardView = new BoardView(playing);
         boardView.showTheDivisionOfSoldiers();
         boardView.showCurrentPlayer();
     }
@@ -24,7 +24,6 @@ public class Preparation {
     public void divideLands() {
 
         ArrayList<Land> lands = new ArrayList<>(Map.getLandHashMap().values());
-        //ArrayList<Player> players = PlayersController.getPlayerList();
         ///////////////////////////////////////////////////////////////////////////////////////
         ArrayList<Player> players = new ArrayList<>(PlayersController.getPlayerList());
         ////////////////////////////////////////////////////////////////////////////////////////

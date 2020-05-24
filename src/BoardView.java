@@ -11,12 +11,12 @@ import java.awt.event.ActionListener;
 import java.util.*;
 
 public class BoardView extends JFrame {
+
     private Playing playing = new Playing();
     private GameBoardChecking boardChecking = new GameBoardChecking(playing);
-    private GamePhase gamePhase = new GamePhase(boardChecking,playing,this);
-
-
-    GameMapController gameMapController = new GameMapController(playing, this, gamePhase);
+    private GamePhase gamePhase = new GamePhase(boardChecking, playing, this);
+    private PlayersController playersController;
+    private GameMapController gameMapController;// = new GameMapController(playing, this, gamePhase);
 
 
     private LandButton[][] landButtons;
@@ -61,6 +61,27 @@ public class BoardView extends JFrame {
     private JLabel playerFourLabel;
 
 
+    public BoardView() {
+
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.setUndecorated(false);
+        this.setLayout(null);
+        this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
+        this.add(gameMap());
+        this.add(showStageOfGamePanel());
+        this.add(showNumberOfReadySoldiers());
+        //this.add(showDicePanel());
+        this.add(showElapsedTime());
+        this.add(getPlayersNamePanel());
+        this.setVisible(true);
+    }
+
+    public BoardView(Playing playing) throws HeadlessException {
+        this();
+        this.playing = playing;
+    }
+////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
     public JButton getAttackerRollB1() {
         return attackerRollB1;
     }
@@ -101,24 +122,6 @@ public class BoardView extends JFrame {
         return attackerDicePanel;
     }
 
-
-    public BoardView() {
-
-        this.setExtendedState(MAXIMIZED_BOTH);
-        this.setUndecorated(false);
-        this.setLayout(null);
-        this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
-        this.add(gameMap());
-        this.add(showStageOfGamePanel());
-        this.add(showNumberOfReadySoldiers());
-        //this.add(showDicePanel());
-        this.add(showElapsedTime());
-        this.add(getPlayersNamePanel());
-        this.setVisible(true);
-    }
-
-
-    ////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public JLabel getNumberOfReadySoldiers() {
         return numberOfReadySoldiers;
     }
@@ -146,6 +149,7 @@ public class BoardView extends JFrame {
         gameMap.setBounds(350, 150, 1300, 500);
         landButtons = new LandButton[Map.getMapLength()][Map.getMapWidth()];
         landButtonMap = new HashMap<>();
+        gameMapController = new GameMapController(playing, this, gamePhase);
         int i, j;
         int id = 1;
         for (i = 0; i < Map.getMapLength(); i++) {
@@ -227,7 +231,7 @@ public class BoardView extends JFrame {
         nextButton.setFont(new Font("Algerian", Font.BOLD, 20));
         nextButton.setPreferredSize(new Dimension(200, 60));
         nextButton.setActionCommand("nextStage");
-        nextButton.addActionListener(new StagePanelController(gamePhase, this,boardChecking,playing));
+        nextButton.addActionListener(new StagePanelController(gamePhase, this, boardChecking, playing));
 
         stageOfGamePanel.add(reinforceLabel);
         stageOfGamePanel.add(attackLabel);
@@ -375,7 +379,7 @@ public class BoardView extends JFrame {
                 playerFourLabel.setIcon(arrowIcon);
             }
         } catch (NullPointerException nullPointerException) {
-           // nullPointerException.printStackTrace();
+            // nullPointerException.printStackTrace();
             nullPointerException.getMessage();
         }
 
@@ -543,7 +547,7 @@ public class BoardView extends JFrame {
         targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
     }
 
-    public void updateLandsAfterFortify(int landId){
+    public void updateLandsAfterFortify(int landId) {
         landButtonMap.get(landId).setBorder(new CompoundBorder());
         landButtonMap.get(landId).setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
         landButtonMap.get(landId).setIcon(new ImageIcon(Map.getLandHashMap().get(landId).getConqueror().getIcon() + ".jpg"));
@@ -558,12 +562,14 @@ public class BoardView extends JFrame {
         getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
     }
 
-    public void showSourceLand(int landId){
-        getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK,8));
+    public void showSourceLand(int landId) {
+        getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
     }
-    public void showDestinationLand(int landId){
-        getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE,8));
+
+    public void showDestinationLand(int landId) {
+        getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
     }
+
     public void showDefenderLand(int landId) {
         getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
     }
@@ -673,10 +679,10 @@ class Suggestion extends JDialog {
                 ////
                 /////////////////////////////////////////////////////////Suggestion.this.gamePhase.setCanReinforce(true);
 
-                    PlayersController.findCurrentPlayer();
-                    Suggestion.this.boardView.showCurrentPlayer();
+                PlayersController.findCurrentPlayer();
+                Suggestion.this.boardView.showCurrentPlayer();
                 Suggestion.this.boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
-                    Suggestion.this.gamePhase.automaticPhaseChange();
+                Suggestion.this.gamePhase.automaticPhaseChange();
 
                 Suggestion.this.boardView.updateStage();
                 /////////////////////////////////////////////////////////////////Suggestion.this.boardView.updateNumberOfReadySPanel();
@@ -704,8 +710,9 @@ class ShowDice extends JDialog implements ActionListener {
     Playing playing;
     BoardView boardView;
     JButton done;
-GamePhase gamePhase;
-    public ShowDice(Playing playing, BoardView boardView , GamePhase gamePhase) {
+    GamePhase gamePhase;
+
+    public ShowDice(Playing playing, BoardView boardView, GamePhase gamePhase) {
         this.playing = playing;
         this.boardView = boardView;
         this.gamePhase = gamePhase;
@@ -835,8 +842,8 @@ class ResultView {
         if (result.isPlayerLose()) {
             JOptionPane.showMessageDialog(boardView, result.getLoser().getName() + " you lose!!!");
         }
-        if (result.isPlayerWon()){
-            JOptionPane.showMessageDialog(boardView,result.getWinner().getName()+" you won!!!");
+        if (result.isPlayerWon()) {
+            JOptionPane.showMessageDialog(boardView, result.getWinner().getName() + " you won!!!");
         }
     }
 }
