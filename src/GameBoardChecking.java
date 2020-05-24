@@ -20,29 +20,24 @@ public class GameBoardChecking {
         return landsWithFortifyAbility;
     }
 
-    //////////////////////////////////////////////////
-    public ArrayList<Integer> getLandsWithForeignNeighbor() {
-        return landsWithForeignNeighbor;
-    }
-
     public void updateNumOfSoldiersReceived(Player currentPlayer) {
 
-        if (searchForAsia(currentPlayer)&& currentPlayer.getConqueredContinents().contains(Map.getAsia()) == false) {
+        if (searchForAsia(currentPlayer) && currentPlayer.getConqueredContinents().contains(Map.getAsia()) == false) {
             currentPlayer.increaseSoldiers(Map.getAsia().getPrizeSoldier());
             currentPlayer.getConqueredContinents().add(Map.getAsia());
         }
 
-        if (searchForAfrica(currentPlayer)&&currentPlayer.getConqueredContinents().contains(Map.getAfrica())== false) {
+        if (searchForAfrica(currentPlayer) && currentPlayer.getConqueredContinents().contains(Map.getAfrica()) == false) {
             currentPlayer.increaseSoldiers(Map.getAfrica().getPrizeSoldier());
             currentPlayer.getConqueredContinents().add(Map.getAfrica());
         }
 
-        if (searchForAmerica(currentPlayer)&& currentPlayer.getConqueredContinents().contains(Map.getAmerica())==false) {
+        if (searchForAmerica(currentPlayer) && currentPlayer.getConqueredContinents().contains(Map.getAmerica()) == false) {
             currentPlayer.increaseSoldiers(Map.getAmerica().getPrizeSoldier());
             currentPlayer.getConqueredContinents().add(Map.getAmerica());
         }
 
-        if (searchForEurope(currentPlayer)&& currentPlayer.getConqueredContinents().contains(Map.getEurope())== false) {
+        if (searchForEurope(currentPlayer) && currentPlayer.getConqueredContinents().contains(Map.getEurope()) == false) {
             currentPlayer.increaseSoldiers(Map.getEurope().getPrizeSoldier());
             currentPlayer.getConqueredContinents().add(Map.getEurope());
         }
@@ -128,9 +123,9 @@ public class GameBoardChecking {
         for (int i = 0; i < Map.getMapLength(); i++) {
             for (int j = 0; j < Map.getMapWidth(); j++) {
                 if (Map.getLands()[i][j] != null)
-                    if (Map.getLands()[i][j].getConqueror().equals(PlayersController.getCurrentPlayer())
-                            && Map.getLands()[i][j].getNumberSoldiers()>1) {
-                        findThePath(Map.getLands()[i][j].getLandID());
+                    if (Map.getLandByCoordinates(i, j).getConqueror().equals(PlayersController.getCurrentPlayer())
+                            && Map.getLandByCoordinates(i, j).getNumberSoldiers() > 1) {
+                        findThePath(Map.getLandByCoordinates(i, j).getLandID());
                     }
             }
         }
@@ -139,9 +134,9 @@ public class GameBoardChecking {
     public void findThePath(int landId) {
 
         for (int neighborId : Map.getNeighbors(landId)) {
-            if (Map.getLandHashMap().get(landId).getConqueror().equals(Map.getLandHashMap().get(neighborId).getConqueror())) {
+            if (Map.getLandById(landId).getConqueror().equals(Map.getLandById(neighborId).getConqueror())) {
                 landsWithFortifyAbility.add(landId);
-                if (landsWithFortifyAbility.contains(neighborId) == false&&Map.getLandHashMap().get(neighborId).getNumberSoldiers()>1) {
+                if (landsWithFortifyAbility.contains(neighborId) == false && Map.getLandById(neighborId).getNumberSoldiers() > 1) {
                     landsWithFortifyAbility.add(neighborId);
                     findThePath(neighborId);
                 }
@@ -152,7 +147,7 @@ public class GameBoardChecking {
     public void findDestinations(int sourceId) {
 
         for (int neighborId : Map.getNeighbors(sourceId)) {
-            if (Map.getLandHashMap().get(sourceId).getConqueror().equals(Map.getLandHashMap().get(neighborId).getConqueror())) {
+            if (Map.getLandById(sourceId).getConqueror().equals(Map.getLandById(neighborId).getConqueror())) {
                 if (destinationsID.contains(neighborId) == false) {
                     destinationsID.add(neighborId);
                     findDestinations(neighborId);
@@ -176,22 +171,22 @@ public class GameBoardChecking {
 
     public int getMaxSoldierForFortify() {
 
-        int numOfSoldiersInSource = Map.getLandHashMap().get(playing.getSourceId()).getNumberSoldiers();
+        int numOfSoldiersInSource = Map.getLandById(playing.getSourceId()).getNumberSoldiers();
         return numOfSoldiersInSource - 1;
     }
 
     public void calcuteAttackerDice() {
 
-        if (Map.getLandHashMap().get(playing.getAttackerLandId()).getNumberSoldiers() >= 4) {
+        if (Map.getLandById(playing.getAttackerLandId()).getNumberSoldiers() >= 4) {
             playing.setAttackerDice(3);
         } else {
-            playing.setAttackerDice( Map.getLandHashMap().get(playing.getAttackerLandId()).getNumberSoldiers() - 1);
+            playing.setAttackerDice(Map.getLandById(playing.getAttackerLandId()).getNumberSoldiers() - 1);
         }
     }
 
     public void calcuteDefenderDice() {
 
-        if (Map.getLandHashMap().get(playing.getDefenderLandId()).getNumberSoldiers() >= 2) {
+        if (Map.getLandById(playing.getDefenderLandId()).getNumberSoldiers() >= 2) {
             playing.setDefenderDice(2);
         } else {
             playing.setDefenderDice(1);
