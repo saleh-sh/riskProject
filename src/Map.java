@@ -15,7 +15,6 @@ public class Map {
     private static final Continent africa;
     private static final Continent europe;
 
-
     static {
         lands = new Land[mapLength][mapWidth];
         landHashMap = new HashMap<>();
