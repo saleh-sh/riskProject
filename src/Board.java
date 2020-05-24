@@ -4,18 +4,6 @@ import java.util.HashMap;
 public class Board {
 
     HashMap<Integer,Land> landHashMap;
-    //HashMap<String,Continent> continentHashMap;
-
-
-
-  /*  public void createContinent(Continent[] continents){
-
-        continentHashMap = new HashMap<>();
-        for(int i=0;i<continents.length;i++){
-            continentHashMap.put(continents[i].getName(),continents[i]);
-        }
-    }*/
-
 
 
    /* public ArrayList<Continent> getContinents(){
@@ -56,22 +44,6 @@ public class Board {
 
     public int getNumberSoldiersOfLand(String landName){
         return landHashMap.get(landName).getNumberSoldiers();
-    }
-
-    /*public ArrayList<Land> getNeighborsOFLand(String landName){
-        return landHashMap.get(landName).getNeighbors();
-    }*/
-
-    public ArrayList<Land> getUnconqueredLands(){
-
-        ArrayList<Land> lands = new ArrayList<>(landHashMap.values());
-        ArrayList<Land> unconqueredLands = new ArrayList<>();
-        for(int i=0;i<lands.size();i++){
-            if(lands.get(i).isConquered() == false){
-                unconqueredLands.add(lands.get(i));
-            }
-        }
-        return unconqueredLands;
     }
 
 }

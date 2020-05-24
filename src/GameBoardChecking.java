@@ -115,7 +115,7 @@ public class GameBoardChecking {
         landsWithForeignNeighbor = new ArrayList<>();
 
         for (int neighborId : Map.getNeighbors(landId)) {
-            if (Map.getLandHashMap().get(landId).getConqueror().equals(Map.getLandHashMap().get(neighborId).getConqueror()) == false) {
+            if (Map.getLandById(landId).getConqueror().equals(Map.getLandById(neighborId).getConqueror()) == false) {
                 landsWithForeignNeighbor.add(neighborId);
             }
         }

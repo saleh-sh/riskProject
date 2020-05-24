@@ -60,7 +60,7 @@ public class Map {
         if (landHashMap.containsKey(id + mapWidth)) {
             neighborsId.add(id + mapWidth);
         }
-        if (landHashMap.containsKey(id - 1) && (id -1) % mapWidth != 0) {
+        if (landHashMap.containsKey(id - 1) && (id - 1) % mapWidth != 0) {
             neighborsId.add(id - 1);
         }
         if (landHashMap.containsKey(id + 1) && id % mapWidth != 0) {
@@ -94,11 +94,13 @@ public class Map {
         return new ArrayList(Arrays.asList(europeLandId));
     }
 
-    public static Land getLandByCoordinates(int x , int y){
+    public static Land getLandByCoordinates(int x, int y) {
         return lands[x][y];
     }
 
-
+    public static Land getLandById(int landId) {
+        return landHashMap.get(landId);
+    }
 
     public static int getMapWidth() {
         return mapWidth;
