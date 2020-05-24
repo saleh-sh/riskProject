@@ -46,7 +46,6 @@ public class GameFlowControl {
             } else {
                 gamePhase.setCanReinforce(false);
                 boardView.getNumberOfSoldiersPanel().setVisible(false);
-
                 ///////////////////////////////////////////////////////////////////////////gamePhase.setCanAttack(true);
                 gamePhase.automaticPhaseChange();
 
@@ -55,5 +54,4 @@ public class GameFlowControl {
             }
         }
     }
-
 }
