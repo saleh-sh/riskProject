@@ -10,6 +10,7 @@ public class GameMapController implements ActionListener {
     private GameFlowControl gameFlowControl;
     private ResultView resultView;
 
+
     public GameMapController(Playing playing, BoardView boardView, GamePhase gamePhase) {
         this.playing = playing;
         this.boardView = boardView;
