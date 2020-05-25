@@ -19,14 +19,16 @@ public class Preparation {
         boardView = new BoardView();
         boardView.showTheDivisionOfSoldiers();
         boardView.showCurrentPlayer();
+
+        MeasurementOfTimeElapsed timeElapsed = new MeasurementOfTimeElapsed(boardView);
+        timeElapsed.start();
     }
 
     public void divideLands() {
 
         ArrayList<Land> lands = new ArrayList<>(Map.getLandHashMap().values());
-        ///////////////////////////////////////////////////////////////////////////////////////
         ArrayList<Player> players = new ArrayList<>(PlayersController.getPlayerList());
-        ////////////////////////////////////////////////////////////////////////////////////////
+
         Collections.shuffle(lands);
         Collections.shuffle(players);
 
