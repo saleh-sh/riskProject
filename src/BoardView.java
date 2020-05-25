@@ -431,9 +431,8 @@ public class BoardView extends JFrame {
     }
 
     public void showForeignNeighborsOfLand(int landId) {
-        //////////////////////////
+
         ArrayList<Integer> neighborsId = boardChecking.getForeignNeighbors(landId);
-        //////////////////////////
         for (int i = 0; i < neighborsId.size(); i++) {
             landButtonMap.get(neighborsId.get(i)).setBackground(Color.DARK_GRAY);
         }
@@ -760,7 +759,6 @@ class ResultView extends JDialog {
     private JLabel winnerMessage;
 
     private JButton back;
-    private JButton playAgain;
     private IconsHandler iconsHandler = new IconsHandler();
 
     public ResultView() {
@@ -791,7 +789,6 @@ class ResultView extends JDialog {
             this.add(winnerMessage);
             this.add(winnerIcon);
             createBackButton();
-            createPlayAgain();
             this.setVisible(true);
             return;
         }
@@ -823,22 +820,5 @@ class ResultView extends JDialog {
             }
         });
         this.add(back);
-    }
-
-    public void createPlayAgain() {
-        playAgain = new JButton("play again");
-        playAgain.setBounds(350, 230, 130, 40);
-        playAgain.setFont(new Font("Algerian", Font.BOLD, 20));
-        playAgain.setForeground(Color.DARK_GRAY);
-        playAgain.setBackground(Color.WHITE);
-        playAgain.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ResultView.this.dispose();
-                ResultView.this.boardView.dispose();
-                BoardView boardView = new BoardView();
-            }
-        });
-        this.add(playAgain);
     }
 }
