@@ -16,6 +16,7 @@ public class BoardView extends JFrame {
     private GameBoardChecking boardChecking = new GameBoardChecking(playing);
     private GamePhase gamePhase = new GamePhase(boardChecking, playing, this);
     private GameMapController gameMapController = new GameMapController(playing, this, gamePhase);
+    private IconsHandler iconsHandler = new IconsHandler();
 
 
     private LandButton[][] landButtons;
@@ -282,7 +283,7 @@ public class BoardView extends JFrame {
 
         label = new JLabel();
         String iconAddress = "" + PlayersController.getCurrentPlayer().getIcon();
-        currentPlayerIcon = new ImageIcon(iconAddress + ".jpg");
+        currentPlayerIcon = iconsHandler.getPlayersIconByName(iconAddress);
         label.setIcon(currentPlayerIcon);
 
         numberOfSoldiersPanel.add(label);
@@ -357,7 +358,7 @@ public class BoardView extends JFrame {
     public void showCurrentPlayer() {
 
         String name = PlayersController.getCurrentPlayer().getName();
-        Icon arrowIcon = new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\arrows.png");
+        Icon arrowIcon = iconsHandler.getArrows();
         int numberOfPlayers = PlayersController.getNumberOfPlayers();
 
         playerOneLabel.setIcon(null);
@@ -393,7 +394,7 @@ public class BoardView extends JFrame {
 
     public void showBackButton() {
 
-        JButton backToMenu = new JButton(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\back.png"));
+        JButton backToMenu = new JButton(iconsHandler.getBack());
         backToMenu.setBounds(20, 950, 120, 80);
         backToMenu.addActionListener(new AbstractAction() {
             @Override
@@ -469,13 +470,13 @@ public class BoardView extends JFrame {
 
     public void updateGameMap(int landId) {
         LandButton targetButton = this.getLandButtonByID(landId);
-        targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
+        targetButton.setText(Map.getLandById(landId).getNumberSoldiers() + "");
     }
 
     public void updateLandsAfterFortify(int landId) {
         landButtonMap.get(landId).setBorder(new CompoundBorder());
         landButtonMap.get(landId).setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
-        landButtonMap.get(landId).setIcon(new ImageIcon(Map.getLandHashMap().get(landId).getConqueror().getIcon() + ".jpg"));
+        landButtonMap.get(landId).setIcon(iconsHandler.getPlayersIconByName(Map.getLandById(landId).getConqueror().getIcon()));
     }
 
     public void updateNumberOfReadySPanel() {
@@ -501,8 +502,8 @@ public class BoardView extends JFrame {
 
     public void updateLandsAfterAttack(int landId) {
         landButtonMap.get(landId).setBorder(new CompoundBorder());
-        landButtonMap.get(landId).setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");
-        landButtonMap.get(landId).setIcon(new ImageIcon(Map.getLandHashMap().get(landId).getConqueror().getIcon() + ".jpg"));
+        landButtonMap.get(landId).setText(Map.getLandById(landId).getNumberSoldiers() + "");
+        landButtonMap.get(landId).setIcon(iconsHandler.getPlayersIconByName(Map.getLandById(landId).getConqueror().getIcon()));
     }
 
     public void updateRounds() {
@@ -555,16 +556,18 @@ class Suggestion extends JDialog {
     private Playing playing;
     private BoardView boardView;
     private GamePhase gamePhase;
+    private IconsHandler iconsHandler;
 
     public Suggestion(Playing playing, BoardView boardView, GamePhase gamePhase) {
         this.boardView = boardView;
         this.playing = playing;
         this.gamePhase = gamePhase;
-        boardChecking = new GameBoardChecking(playing);
+        this.boardChecking = new GameBoardChecking(playing);
+        this.iconsHandler = new IconsHandler();
 
         setBounds(1380, 750, 500, 282);
         setUndecorated(true);
-        setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\DbackG.jpg")));
+        setContentPane(new JLabel(iconsHandler.getDialogBackG()));
         setLayout(null);
 
 
@@ -632,25 +635,28 @@ class ShowDice extends JDialog implements ActionListener {
     private JPanel attackerDicePanel;
     private JPanel defenderDicePanel;
     private JButton attackerRollB1;
-    JButton attackerRollB2;
-    JButton attackerRollB3;
-    JButton defenderRollB1;
-    JButton defenderRollB2;
+    private JButton attackerRollB2;
+    private JButton attackerRollB3;
+    private JButton defenderRollB1;
+    private JButton defenderRollB2;
 
-    Playing playing;
-    BoardView boardView;
-    JButton done;
-    GamePhase gamePhase;
+    private Playing playing;
+    private BoardView boardView;
+    private JButton done;
+    private GamePhase gamePhase;
+
+    private IconsHandler iconsHandler;
 
     public ShowDice(Playing playing, BoardView boardView, GamePhase gamePhase) {
         this.playing = playing;
         this.boardView = boardView;
         this.gamePhase = gamePhase;
+        this.iconsHandler = new IconsHandler();
 
         this.setBounds(30, 150, 300, 280);
-        setUndecorated(true);
+        this.setUndecorated(true);
         this.setLayout(null);
-        this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\DbackG.jpg")));
+        this.setContentPane(new JLabel(iconsHandler.getDialogBackG()));
         this.addDoneButton();
         this.showAttackerDicePanel();
         this.showDefenderDicePanel();
@@ -701,7 +707,7 @@ class ShowDice extends JDialog implements ActionListener {
     public void showDefenderDicePanel() {
 
         defenderDicePanel = new JPanel();
-        defenderDicePanel.setBounds(150, 20, 90, 160);
+        defenderDicePanel.setBounds(140, 20, 90, 140);
         defenderDicePanel.setBackground(Color.DARK_GRAY);
         GridLayout gridLayout = new GridLayout(2, 1);
 
@@ -728,21 +734,20 @@ class ShowDice extends JDialog implements ActionListener {
         String actionCommand = e.getActionCommand();
 
         if (actionCommand.equalsIgnoreCase("attacker button1")) {
-            this.attackerRollB1.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(0) + ".jpg"));
+            this.attackerRollB1.setIcon(iconsHandler.getDiceIconByNumber(playing.getAttackerRolls().get(0)));
         }
         if (actionCommand.equalsIgnoreCase("attacker button2")) {
-            this.attackerRollB2.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(1) + ".jpg"));
+            this.attackerRollB2.setIcon(iconsHandler.getDiceIconByNumber(playing.getAttackerRolls().get(1)));
         }
         if (actionCommand.equalsIgnoreCase("attacker button3")) {
-            this.attackerRollB3.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(2) + ".jpg"));
+            this.attackerRollB3.setIcon(iconsHandler.getDiceIconByNumber(playing.getAttackerRolls().get(2)));
         }
 
         if (actionCommand.equalsIgnoreCase("defender button1")) {
-            this.defenderRollB1.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(0) + ".jpg"));
+            this.defenderRollB1.setIcon(iconsHandler.getDiceIconByNumber(playing.getDefenderRolls().get(0)));
         }
-
         if (actionCommand.equalsIgnoreCase("defender button2")) {
-            this.defenderRollB2.setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(1) + ".jpg"));
+            this.defenderRollB2.setIcon(iconsHandler.getDiceIconByNumber(playing.getDefenderRolls().get(1)));
         }
 
         if (actionCommand.equalsIgnoreCase("done button")) {
@@ -753,6 +758,7 @@ class ShowDice extends JDialog implements ActionListener {
             boardView.updateLandsAfterAttack(playing.getDefenderLandId());
             playing.finishTheAttack();
         }
+
     }
 }
 
@@ -786,8 +792,10 @@ class ResultView extends JDialog {
     private JLabel loserMessage;
     private JLabel winnerMessage;
 
+    private IconsHandler iconsHandler;
+
     public ResultView() {
-        this.setBounds(500, 500, 500, 400);
+        this.setBounds(600, 400, 500, 350);
         this.setLayout(null);
         this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\DbackG.jpg")));
         this.showResult();
@@ -796,13 +804,14 @@ class ResultView extends JDialog {
     public void showResult() {
         result = new Result();
         result.findResult();
+        iconsHandler = new IconsHandler();
 
         if (result.isPlayerWon()) {
             winnerMessage = new JLabel(result.getWinner().getName() + " won!!!");
             winnerMessage.setFont(new Font("Algerian", Font.BOLD, 40));
-            winnerMessage.setBounds(100, 140, 500, 50);
-            JLabel winnerIcon = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + result.getWinner().getIcon() + ".jpg"));
-            winnerIcon.setBounds(300, 200, 70, 70);
+            winnerMessage.setBounds(80, 120, 500, 50);
+            JLabel winnerIcon = new JLabel(iconsHandler.getPlayersIconByName(result.getWinner().getIcon()));
+            winnerIcon.setBounds(200, 150, 70, 70);
             this.add(winnerMessage);
             this.add(winnerIcon);
             this.setVisible(true);
@@ -811,9 +820,9 @@ class ResultView extends JDialog {
         if (result.isPlayerLose()) {
             loserMessage = new JLabel(result.getLoser().getName() + " lost!!!");
             loserMessage.setFont(new Font("Algerian", Font.BOLD, 40));
-            loserMessage.setBounds(100, 140, 500, 50);
-            JLabel loserIcon = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + result.getLoser().getIcon() + ".jpg"));
-            loserIcon.setBounds(250,200,70,70);
+            loserMessage.setBounds(80, 120, 500, 50);
+            JLabel loserIcon = new JLabel(iconsHandler.getPlayersIconByName(result.getLoser().getIcon()));
+            loserIcon.setBounds(200, 150, 70, 70);
             this.add(loserIcon);
             this.add(loserMessage);
             this.setVisible(true);
