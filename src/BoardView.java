@@ -358,7 +358,7 @@ public class BoardView extends JFrame {
             playerThreeLabel.setIcon(null);
             playerFourLabel.setIcon(null);
         } catch (NullPointerException nullPointerException) {
-            nullPointerException.printStackTrace();
+            //nullPointerException.printStackTrace();
             nullPointerException.getMessage();
         }
 
