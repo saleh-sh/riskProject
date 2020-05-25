@@ -34,7 +34,7 @@ public class GameMapController implements ActionListener {
 
         } else if (gamePhase.isCanAttack()) {
 
-            if (/*playing.getAttackerLandId() == null*/gamePhase.isAttackerChose()) {
+            if (gamePhase.isAttackerChose()) {
                 playing.setAttackerLandId(landId);
                 boardView.showAttackerLand(landId);
                 boardView.returnPreviousState();
@@ -43,19 +43,15 @@ public class GameMapController implements ActionListener {
                 playing.setDefenderLandId(landId);
                 boardView.showDefenderLand(landId);
                 boardView.returnPreviousState();
-
                 playing.attack();
 
                 new ShowDice(playing, boardView, gamePhase);
 
-                //resultView = new ResultView(boardView);
                 resultView = new ResultView();
                 resultView.showResult();
-
-
             }
         } else if (gamePhase.isCanFortify()) {
-            if (/*playing.getSourceId() == null*/gamePhase.isSourceChose()) {
+            if (gamePhase.isSourceChose()) {
                 playing.setSourceId(landId);
                 boardView.showSourceLand(playing.getSourceId());
                 boardView.returnPreviousState();
@@ -65,7 +61,6 @@ public class GameMapController implements ActionListener {
                 boardView.returnPreviousState();
                 boardView.showDestinationLand(landId);
                 new Suggestion(playing, boardView, gamePhase);
-                // playing.fortify();
             }
         }
     }
@@ -93,11 +88,9 @@ class StagePanelController implements ActionListener {
             gamePhase.setCanAttack(false);
             gamePhase.setManualChange(true);
             boardView.returnPreviousState();
-            //////////////////////////////////////////////////////////////////////////////gamePhase.setCanFortify(true);
             boardView.updateStage();
             gamePhase.setAttackerChose(false);
             gamePhase.setDefenderChose(false);
-            /////////////////////////////////////////////////////////////////////boardView.showLandsWithFortifyAbility();
             gamePhase.automaticPhaseChange();
         } else if (gamePhase.isCanFortify()) {
             boardView.returnPreviousState();
@@ -105,10 +98,7 @@ class StagePanelController implements ActionListener {
             gamePhase.setSourceChose(false);
             gamePhase.setDestinationChose(false);
             gamePhase.setManualChange(false);
-            /////
             playing.finishFortify();
-            /////
-            /////////////////////////////////////////////////////////////////////////////gamePhase.setCanReinforce(true);
             boardView.updateStage();
             PlayersController.findCurrentPlayer();
             boardView.updateRounds();
@@ -155,6 +145,5 @@ class dicePanelController implements ActionListener {
         if (actionCommand.equalsIgnoreCase("defender button2")) {
             boardView.getDefenderRollB2().setIcon(iconsHandler.getDiceIconByNumber(playing.getDefenderRolls().get(1)));
         }
-
     }
 }
