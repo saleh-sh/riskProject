@@ -745,6 +745,9 @@ class ShowDice extends JDialog implements ActionListener {
             boardView.updateLandsAfterAttack(playing.getAttackerLandId());
             boardView.updateLandsAfterAttack(playing.getDefenderLandId());
             playing.finishTheAttack();
+           ResultView resultView = new ResultView(boardView);
+            resultView.showResult();
+
         }
 
     }
@@ -807,7 +810,7 @@ class ResultView extends JDialog {
 
     public void createBackButton() {
         back = new JButton("back to mnu");
-        back.setBounds(10, 230, 100, 40);
+        back.setBounds(10, 230, 120, 40);
         back.setFont(new Font("Algerian", Font.BOLD, 20));
         back.setForeground(Color.WHITE);
         back.setBackground(Color.DARK_GRAY);
