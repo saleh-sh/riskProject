@@ -1,8 +1,5 @@
-import java.util.ArrayList;
-
 public class Result {
 
-    //private ArrayList<Player> losers = new ArrayList<>();
     private Player winner;
     private Player loser;
     private boolean playerLose = false;
@@ -28,7 +25,6 @@ public class Result {
 
         for (int i = PlayersController.getPlayerList().size() - 1; i >= 0; i--) {
             if (PlayersController.getPlayerList().get(i).getConqueredLands().size() == 0) {
-                //losers.add(PlayersController.getPlayerList().get(i));
                 loser = PlayersController.getPlayerList().get(i);
                 playerLose = true;
                 PlayersController.getPlayerList().remove(i);

@@ -11,10 +11,6 @@ public class MeasurementOfTimeElapsed extends Thread {
     private int minutes = 0;
     private int hour = 0;
 
-    public int getMillis() {
-        return millis;
-    }
-
     public int getSecond() {
         return second;
     }

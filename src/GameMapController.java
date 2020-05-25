@@ -1,5 +1,3 @@
-import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -30,10 +28,6 @@ public class GameMapController implements ActionListener {
 
             if (currentPlayer.getConqueredLands().contains(landId) == true && currentPlayer.getSoldiers() > 0) {
                 playing.putTheBead(landId);
-                /*
-                LandButton targetButton = boardView.getLandButtonByID(landId);
-                targetButton.setText(Map.getLandHashMap().get(landId).getNumberSoldiers() + "");*/
-                ///خط پایین جایگزین دو خط بالا است
                 boardView.updateGameMap(landId);
                 gameFlowControl.controlGameFLow();
             }
@@ -42,32 +36,22 @@ public class GameMapController implements ActionListener {
 
             if (/*playing.getAttackerLandId() == null*/gamePhase.isAttackerChose()) {
                 playing.setAttackerLandId(landId);
-                //boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.BLACK, 8));
-                //خط پایین جایگزین خط بالا است
                 boardView.showAttackerLand(landId);
                 boardView.returnPreviousState();
-                ///////////////////////////////////////////////////////////boardView.showForeignNeighborsOfLand(landId);
                 gamePhase.automaticPhaseChange();
             } else {
                 playing.setDefenderLandId(landId);
-                //boardView.getLandButtonByID(landId).setBorder(BorderFactory.createLineBorder(Color.WHITE, 8));
-                //خط پایین جایگزین خط بالا شد
                 boardView.showDefenderLand(landId);
                 boardView.returnPreviousState();
 
                 playing.attack();
 
-
+                new ShowDice(playing, boardView, gamePhase);
 
                 //resultView = new ResultView(boardView);
                 resultView = new ResultView();
-                    resultView.showResult();
-                //boardView.showAttackerDicePanel();
-                //boardView.showDefenderDicePanel();
+                resultView.showResult();
 
-                //boardView.showLandsWithAttackAbility();
-
-                new ShowDice(playing, boardView,gamePhase);
 
             }
         } else if (gamePhase.isCanFortify()) {
@@ -75,7 +59,6 @@ public class GameMapController implements ActionListener {
                 playing.setSourceId(landId);
                 boardView.showSourceLand(playing.getSourceId());
                 boardView.returnPreviousState();
-                ////////////////////////////////////////////////////////boardView.showDestinations(playing.getSourceId());
                 gamePhase.automaticPhaseChange();
             } else {
                 playing.setDestinationId(landId);
@@ -83,8 +66,6 @@ public class GameMapController implements ActionListener {
                 boardView.showDestinationLand(landId);
                 new Suggestion(playing, boardView, gamePhase);
                 // playing.fortify();
-                //boardView.getLandButtonByID(playing.getSourceId()).setText(Map.getLandHashMap().get(playing.getSourceId()).getNumberSoldiers() + "");
-                // boardView.getLandButtonByID(playing.getDestinationId()).setText(Map.getLandHashMap().get(playing.getDestinationId()).getNumberSoldiers() + "");
             }
         }
     }
@@ -95,10 +76,10 @@ class StagePanelController implements ActionListener {
 
     private GamePhase gamePhase;
     private BoardView boardView;
-private GameBoardChecking boardChecking;
-private Playing playing;
+    private GameBoardChecking boardChecking;
+    private Playing playing;
 
-    public StagePanelController(GamePhase gamePhase, BoardView boardView,GameBoardChecking gameBoardChecking,Playing playing) {
+    public StagePanelController(GamePhase gamePhase, BoardView boardView, GameBoardChecking gameBoardChecking, Playing playing) {
         this.gamePhase = gamePhase;
         this.boardView = boardView;
         this.boardChecking = gameBoardChecking;
@@ -144,6 +125,7 @@ class dicePanelController implements ActionListener {
 
     private BoardView boardView;
     private Playing playing;
+    private IconsHandler iconsHandler;
 
     public dicePanelController(BoardView boardView, Playing playing) {
         this.boardView = boardView;
@@ -154,23 +136,24 @@ class dicePanelController implements ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         String actionCommand = e.getActionCommand();
+        iconsHandler = new IconsHandler();
 
         if (actionCommand.equalsIgnoreCase("attacker button1")) {
-            boardView.getAttackerRollB1().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(0) + ".jpg"));
+            boardView.getAttackerRollB1().setIcon(iconsHandler.getDiceIconByNumber(playing.getAttackerRolls().get(0)));
         }
         if (actionCommand.equalsIgnoreCase("attacker button2")) {
-            boardView.getAttackerRollB2().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(1) + ".jpg"));
+            boardView.getAttackerRollB2().setIcon(iconsHandler.getDiceIconByNumber(playing.getAttackerRolls().get(1)));
         }
         if (actionCommand.equalsIgnoreCase("attacker button3")) {
-            boardView.getAttackerRollB3().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getAttackerRolls().get(2) + ".jpg"));
+            boardView.getAttackerRollB3().setIcon(iconsHandler.getDiceIconByNumber(playing.getAttackerRolls().get(2)));
         }
 
         if (actionCommand.equalsIgnoreCase("defender button1")) {
-            boardView.getDefenderRollB1().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(0) + ".jpg"));
+            boardView.getDefenderRollB1().setIcon(iconsHandler.getDiceIconByNumber(playing.getDefenderRolls().get(0)));
         }
 
         if (actionCommand.equalsIgnoreCase("defender button2")) {
-            boardView.getDefenderRollB2().setIcon(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + playing.getDefenderRolls().get(1) + ".jpg"));
+            boardView.getDefenderRollB2().setIcon(iconsHandler.getDiceIconByNumber(playing.getDefenderRolls().get(1)));
         }
 
     }

@@ -60,6 +60,34 @@ public class GamePhase {
         return isPutBeadPhase;
     }
 
+    public boolean isAttackerChose() {
+        return attackerChose;
+    }
+
+    public boolean isSourceChose() {
+        return sourceChose;
+    }
+
+    public void setAttackerChose(boolean attackerChose) {
+        this.attackerChose = attackerChose;
+    }
+
+    public void setDefenderChose(boolean defenderChose) {
+        this.defenderChose = defenderChose;
+    }
+
+    public void setSourceChose(boolean sourceChose) {
+        this.sourceChose = sourceChose;
+    }
+
+    public void setDestinationChose(boolean destinationChose) {
+        this.destinationChose = destinationChose;
+    }
+
+    public void setManualChange(boolean manualChange) {
+        this.manualChange = manualChange;
+    }
+
 
     public void automaticPhaseChange() {
 
@@ -89,7 +117,6 @@ public class GamePhase {
             }
         }else {
             canAttack = false;
-           // manualChange = false;
         }
 
         boardChecking.findLandsWithFortifyAbility();
@@ -97,14 +124,12 @@ public class GamePhase {
             canFortify = true;
             boardView.updateStage();
             if (sourceChose == false) {
-                System.out.println("sourceChose"+sourceChose);
                 boardView.showLandsWithFortifyAbility();
                 sourceChose = true;
                 destinationChose = false;
                 return;
             }
             if (destinationChose == false) {
-                System.out.println("destinationChose == false   "+destinationChose);
                 boardView.showDestinations(playing.getSourceId());
                 destinationChose = true;
                 sourceChose = false;
@@ -121,31 +146,4 @@ public class GamePhase {
         automaticPhaseChange();
     }
 
-    public boolean isAttackerChose() {
-        return attackerChose;
-    }
-
-    public boolean isSourceChose() {
-        return sourceChose;
-    }
-
-    public void setAttackerChose(boolean attackerChose) {
-        this.attackerChose = attackerChose;
-    }
-
-    public void setDefenderChose(boolean defenderChose) {
-        this.defenderChose = defenderChose;
-    }
-
-    public void setSourceChose(boolean sourceChose) {
-        this.sourceChose = sourceChose;
-    }
-
-    public void setDestinationChose(boolean destinationChose) {
-        this.destinationChose = destinationChose;
-    }
-
-    public void setManualChange(boolean manualChange) {
-        this.manualChange = manualChange;
-    }
 }

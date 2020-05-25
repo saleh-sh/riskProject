@@ -46,11 +46,8 @@ public class GameFlowControl {
             } else {
                 gamePhase.setCanReinforce(false);
                 boardView.getNumberOfSoldiersPanel().setVisible(false);
-                ///////////////////////////////////////////////////////////////////////////gamePhase.setCanAttack(true);
                 gamePhase.automaticPhaseChange();
-
                 boardView.updateStage();
-                /////////////////////////////////////////////////////////////////boardView.showLandsWithAttackAbility();
             }
         }
     }

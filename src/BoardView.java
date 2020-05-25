@@ -36,7 +36,7 @@ public class BoardView extends JFrame {
     private JLabel numberOfReadySoldiers;
     private JLabel label;
     private ImageIcon currentPlayerIcon;
-    /////////////////////////////////////////////////
+
     private JPanel attackerDicePanel;
     private JPanel defenderDicePanel;
     private JButton attackerRollB1;
@@ -44,15 +44,13 @@ public class BoardView extends JFrame {
     private JButton attackerRollB3;
     private JButton defenderRollB1;
     private JButton defenderRollB2;
-    /////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     private JPanel timePanel;
     private JLabel secondsLabel;
     private JLabel minutesLabel;
     private JLabel hoursLabel;
     private MeasurementOfTimeElapsed MTimeElapsed = new MeasurementOfTimeElapsed(this);
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private JPanel playersNamePanel;
     private JLabel playerOneLabel;
@@ -105,11 +103,10 @@ public class BoardView extends JFrame {
         this.setExtendedState(MAXIMIZED_BOTH);
         this.setUndecorated(true);
         this.setLayout(null);
-        this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\backG.jpg")));
+        this.setContentPane(new JLabel(iconsHandler.getBackGround()));
         this.add(gameMap());
         this.add(showStageOfGamePanel());
         this.add(showNumberOfReadySoldiers());
-        //this.add(showDicePanel());
         this.add(showElapsedTime());
         this.add(getPlayersNamePanel());
         this.add(getRoundsPanel());
@@ -118,7 +115,6 @@ public class BoardView extends JFrame {
     }
 
 
-    ////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public JLabel getNumberOfReadySoldiers() {
         return numberOfReadySoldiers;
     }
@@ -135,7 +131,6 @@ public class BoardView extends JFrame {
         return numberOfSoldiersPanel;
     }
 
-    /////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public LandButton getLandButtonByID(int id) {
         return landButtonMap.get(id);
     }
@@ -177,7 +172,6 @@ public class BoardView extends JFrame {
         return gameMap;
     }
 
-    ////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public void showTheDivisionOfSoldiers() {
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -187,7 +181,7 @@ public class BoardView extends JFrame {
                         if (Map.getLands()[i][j] != null) {
                             String icon = Map.getLandByCoordinates(i, j).getConqueror().getIcon();
                             String text = "" + Map.getLandByCoordinates(i, j).getNumberSoldiers();
-                            ImageIcon imageIcon = new ImageIcon(icon + ".jpg");
+                            ImageIcon imageIcon =iconsHandler.getPlayersIconByName(icon);
                             landButtons[i][j].setIcon(imageIcon);
                             landButtons[i][j].setText(text);
                             landButtons[i][j].setFont(new Font("Algerian", Font.BOLD, 20));
@@ -204,7 +198,6 @@ public class BoardView extends JFrame {
         thread.start();
     }
 
-    //////////////////////////////////////////////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
     public JPanel showStageOfGamePanel() {
 
         stageOfGamePanel = new JPanel();
