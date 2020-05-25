@@ -787,7 +787,7 @@ class ResultView extends JDialog {
     private JLabel winnerMessage;
 
     public ResultView() {
-        this.setBounds(500, 500, 400, 400);
+        this.setBounds(500, 500, 500, 400);
         this.setLayout(null);
         this.setContentPane(new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\DbackG.jpg")));
         this.showResult();
@@ -800,7 +800,7 @@ class ResultView extends JDialog {
         if (result.isPlayerWon()) {
             winnerMessage = new JLabel(result.getWinner().getName() + " won!!!");
             winnerMessage.setFont(new Font("Algerian", Font.BOLD, 40));
-            winnerMessage.setBounds(100, 200, 500, 50);
+            winnerMessage.setBounds(100, 140, 500, 50);
             JLabel winnerIcon = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + result.getWinner().getIcon() + ".jpg"));
             winnerIcon.setBounds(300, 200, 70, 70);
             this.add(winnerMessage);
@@ -811,9 +811,9 @@ class ResultView extends JDialog {
         if (result.isPlayerLose()) {
             loserMessage = new JLabel(result.getLoser().getName() + " lost!!!");
             loserMessage.setFont(new Font("Algerian", Font.BOLD, 40));
-            loserMessage.setBounds(100, 200, 500, 50);
+            loserMessage.setBounds(100, 140, 500, 50);
             JLabel loserIcon = new JLabel(new ImageIcon("C:\\Users\\Soroushiravany\\Desktop\\" + result.getLoser().getIcon() + ".jpg"));
-            loserIcon.setBounds(300,200,70,70);
+            loserIcon.setBounds(250,200,70,70);
             this.add(loserIcon);
             this.add(loserMessage);
             this.setVisible(true);
