@@ -146,9 +146,7 @@ public class BoardView extends JFrame {
         for (i = 0; i < Map.getMapLength(); i++) {
             for (j = 0; j < Map.getMapWidth(); j++) {
                 landButtons[i][j] = new LandButton(id);
-                //////
                 landButtonMap.put(id, landButtons[i][j]);
-                //////
                 landButtons[i][j].setActionCommand("" + id);
                 landButtons[i][j].addActionListener(gameMapController);
                 if (Map.getAsia().getLands().contains(id)) {
@@ -359,7 +357,7 @@ public class BoardView extends JFrame {
         try {
             playerThreeLabel.setIcon(null);
             playerFourLabel.setIcon(null);
-        }catch (NullPointerException nullPointerException){
+        } catch (NullPointerException nullPointerException) {
             nullPointerException.printStackTrace();
             nullPointerException.getMessage();
         }
@@ -610,10 +608,7 @@ class Suggestion extends JDialog {
                 Suggestion.this.boardView.showCurrentPlayer();
                 Suggestion.this.boardChecking.updateNumOfSoldiersReceived(PlayersController.getCurrentPlayer());
                 Suggestion.this.gamePhase.automaticPhaseChange();
-
                 Suggestion.this.boardView.updateStage();
-                /////////////////////////////////////////////////////////////////Suggestion.this.boardView.updateNumberOfReadySPanel();
-                ///////////////////////////////////////////////////////////////////Suggestion.this.boardView.numberOfReadySoldiersPanelVisibility(true);
                 Suggestion.this.dispose();
             }
         });
@@ -756,29 +751,7 @@ class ShowDice extends JDialog implements ActionListener {
     }
 }
 
-/*
-class ResultView {
 
-    private Result result;
-    private BoardView boardView;
-
-    public ResultView(BoardView boardView) {
-        this.boardView = boardView;
-    }
-
-    public void showResult() {
-        result = new Result();
-        result.findResult();
-        if (result.isPlayerLose()) {
-            JOptionPane.showMessageDialog(boardView, result.getLoser().getName() + " you lose!!!");
-        }
-        if (result.isPlayerWon()) {
-            JOptionPane.showMessageDialog(boardView, result.getWinner().getName() + " you won!!!");
-        }
-    }
-}
-
-*/
 class ResultView extends JDialog {
 
     private Result result;
