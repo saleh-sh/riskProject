@@ -47,7 +47,7 @@ public class GameMapController implements ActionListener {
 
                 new ShowDice(playing, boardView, gamePhase);
 
-                resultView = new ResultView();
+                resultView = new ResultView(boardView);
                 resultView.showResult();
             }
         } else if (gamePhase.isCanFortify()) {

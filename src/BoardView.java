@@ -755,17 +755,25 @@ class ShowDice extends JDialog implements ActionListener {
 class ResultView extends JDialog {
 
     private Result result;
-
+    private BoardView boardView;
     private JLabel loserMessage;
     private JLabel winnerMessage;
 
+    private JButton back;
+    private JButton playAgain;
     private IconsHandler iconsHandler = new IconsHandler();
 
     public ResultView() {
-        this.setBounds(700, 300, 500, 320);
+        this.setBounds(700, 300, 500, 280);
         this.setLayout(null);
+        this.setUndecorated(true);
         this.setContentPane(new JLabel(iconsHandler.getDialogBackG()));
         this.showResult();
+    }
+
+    public ResultView(BoardView boardView) {
+        this();
+        this.boardView = boardView;
     }
 
     public void showResult() {
@@ -782,6 +790,8 @@ class ResultView extends JDialog {
             winnerIcon.setBounds(190, 170, 70, 70);
             this.add(winnerMessage);
             this.add(winnerIcon);
+            createBackButton();
+            createPlayAgain();
             this.setVisible(true);
             return;
         }
@@ -796,5 +806,39 @@ class ResultView extends JDialog {
             this.add(loserMessage);
             this.setVisible(true);
         }
+    }
+
+    public void createBackButton() {
+        back = new JButton("back to mnu");
+        back.setBounds(10, 230, 100, 40);
+        back.setFont(new Font("Algerian", Font.BOLD, 20));
+        back.setForeground(Color.WHITE);
+        back.setBackground(Color.DARK_GRAY);
+        back.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResultView.this.boardView.dispose();
+                ResultView.this.dispose();
+                RiskView riskView = new RiskView();
+            }
+        });
+        this.add(back);
+    }
+
+    public void createPlayAgain() {
+        playAgain = new JButton("play again");
+        playAgain.setBounds(350, 230, 130, 40);
+        playAgain.setFont(new Font("Algerian", Font.BOLD, 20));
+        playAgain.setForeground(Color.DARK_GRAY);
+        playAgain.setBackground(Color.WHITE);
+        playAgain.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ResultView.this.dispose();
+                ResultView.this.boardView.dispose();
+                BoardView boardView = new BoardView();
+            }
+        });
+        this.add(playAgain);
     }
 }
